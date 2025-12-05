@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لعبة العناصر الدورية — كامل</title>
+<style>
+:root{
+  --bg-dark:#0f1720; --bg-light:#f5f5f5;
+  --card-dark:#111827; --card-light:#fff;
+  --text-dark:#fff; --text-light:#042;
+  --muted-dark:#9ca3af; --muted-light:#555;
+  --accent:#06b6d4; --ok:#10b981; --bad:#ef4444;
+}
+html,body{margin:0; padding:0; width:100%; height:100%; font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial; background:var(--bg-dark); color:var(--text-dark);}
+body.light{background:var(--bg-light); color:var(--text-light);}
+.wrap{width:100vw; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding:2vh 2vw; box-sizing:border-box; overflow-y:auto;}
+h1{text-align:center; margin:1vh 0 2vh; font-size:5vh;}
+button{cursor:pointer; border:0; border-radius:1vh; padding:1.5vh 3vw; font-size:3vh;}
+.primary{background:var(--accent); color:#042; box-shadow:0 0.5vh 1vh rgba(6,182,212,.2);}
+.danger{background:var(--bad); color:#fff;}
+.hidden{display:none;}
+.card{background:rgba(255,255,255,0.02); border-radius:1vh; margin-top:1vh; border:0.2vh solid rgba(255,255,255,0.03); width:95%; padding:2vh 2vw; box-sizing:border-box; font-size:3vh;}
+.controls{display:flex; flex-wrap:wrap; justify-content:space-around; margin-top:2vh; font-size:2.5vh;}
+.row{display:flex; justify-content:space-between; align-items:center; width:100%; margin:1vh 0;}
+input[type="text"]{padding:2vh 1vw; font-size:3vh; border-radius:0.5vh; border:0; width:95%; box-sizing:border-box;}
+select{padding:1vh 1vw; font-size:2.5vh; border-radius:0.5vh; border:0;}
+.progress{height:3vh; background:rgba(255,255,255,0.06); border-radius:1vh; overflow:hidden;}
+.bar{height:100%; background:linear-gradient(90deg,#06b6d4,#10b981); width:0%;}
+.rank{padding:0.5vh 1vw; border-radius:10vh; font-size:2.5vh; background:rgba(255,255,255,0.03); display:inline-block;}
+#loseScreen{position:fixed; top:0; left:0; width:100vw; height:100vh; background:linear-gradient(90deg,#3b0b0b,#7b1212); display:flex; align-items:center; justify-content:center; flex-direction:column; font-size:5vh; color:#fff; z-index:999; text-align:center; opacity:0; pointer-events:none; transition:opacity .25s;}
+#loseScreen.show{opacity:1; pointer-events:auto;}
+#menu{text-align:center; width:100%;}
+#menu button{width:60%; margin:1vh 0;}
+body.light .card{background:#fff; border:0.2vh solid #ddd;}
+body.light button{background:var(--card-light); color:var(--text-light);}
+#celebration{position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(255,255,255,0.9); display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:6vh; color:#10b981; z-index:1000; text-align:center; opacity:0; pointer-events:none; transition:opacity 0.3s;}
+#celebration.show{opacity:1; pointer-events:auto;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="menu">
+    <h1>⚛️ لعبة العناصر الدورية</h1>
+    <button id="menuQuiz" class="primary">🧪 وضع الاختبار</button>
+    <button id="menuVal" class="primary">⚖️ التكافؤات (Valency)</button>
+    <div style="margin-top:2vh">
+      <button id="clearSave" class="danger">مسح الحفظ</button>
+    </div>
+    <div style="margin-top:2vh">
+      <label><input id="toggleMode" type="checkbox"> وضع النهار / الليل</label>
+    </div>
+  </div>
+
+  <div id="game" class="hidden">
+    <div style="text-align:center;margin-bottom:2vh">
+      <button id="backMenu" class="danger">⬅ العودة للقائمة الرئيسية</button>
+    </div>
+
+    <div class="controls">
+      <div class="row">مستوى الصعوبة:
+        <select id="difficulty">
+          <option value="easy">سهل</option>
+          <option value="medium" selected>متوسط</option>
+          <option value="hard">صعب</option>
+        </select>
+      </div>
+      <div class="row">زمن السؤال:
+        <select id="timeLimit">
+          <option value="8">8 ث</option>
+          <option value="12" selected>12 ث</option>
+          <option value="20">20 ث</option>
+        </select>
+      </div>
+      <div class="row">خبرة (XP): <span id="xp">0</span></div>
+      <div class="row">رتبة: <span id="rank" class="rank">متعلم مبتدئ</span></div>
+    </div>
+
+    <div id="quiz" class="card hidden">
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:2.5vh">
+        <div>🧪 اختبار — سترى اسم العنصر وأدخل الرمز</div>
+        <div>الوقت: <span id="timer">--</span> ث</div>
+      </div>
+      <div id="quizInfo" class="card" style="margin-top:1vh;text-align:center;font-size:5vh">
+        <div id="qName" style="font-weight:700">—</div>
+      </div>
+      <div style="margin-top:1vh">
+        <input id="answer" placeholder="اكتب الرمز (مثال: H)" autocomplete="off" />
+        <div style="display:flex;gap:2vw;margin-top:1vh">
+          <button id="submit" class="primary">تحقق</button>
+        </div>
+      </div>
+      <div style="margin-top:1vh;display:flex;justify-content:space-between;align-items:center">
+        <div>السلسلة: <span id="streak">0</span></div>
+        <div style="width:40%"><div class="progress"><div id="timebar" class="bar"></div></div></div>
+      </div>
+    </div>
+
+    <div id="valency" class="card hidden">
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:2.5vh">
+        <div>⚖️ التكافؤات — أدخل الشحنة (مثال: +1 أو -2 أو 0)</div>
+        <div>الوقت: <span id="valTimer">--</span> ث</div>
+      </div>
+      <div id="valInfo" class="card" style="margin-top:1vh;text-align:center;font-size:5vh">
+        <div id="valPrompt" style="font-weight:700">—</div>
+        <div class="small-muted" style="margin-top:1vh">(سيُقبل إدخال بدون إشارة كقيمة موجبة)</div>
+      </div>
+      <div style="margin-top:1vh">
+        <input id="valAnswer" placeholder="مثال: +1 أو -2 أو 0" autocomplete="off" />
+        <div style="display:flex;gap:2vw;margin-top:1vh">
+          <button id="valSubmit" class="primary">تحقق</button>
+        </div>
+      </div>
+      <div style="margin-top:1vh;display:flex;justify-content:space-between;align-items:center">
+        <div>السلسلة: <span id="valStreak">0</span></div>
+        <div style="width:40%"><div class="progress"><div id="valTimebar" class="bar"></div></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="loseScreen">
+  <div id="loseText">❌ إجابة خاطئة! الإجابة الصحيحة: <strong id="loseAnswer"></strong></div>
+</div>
+
+<div id="celebration">🎉 تهانينا! لقد حصلت على رتبة جديدة! 🎉</div>
+
+<script>
+// FULL JS LOGIC
+const elements=[
+{symbol:'H',name:'الهيدروجين',en:'Hydrogen',val:['+1']},
+{symbol:'He',name:'الهيليوم',en:'Helium',val:['0']},
+{symbol:'Li',name:'الليثيوم',en:'Lithium',val:['+1']},
+{symbol:'Be',name:'البيريليوم',en:'Beryllium',val:['+2']},
+{symbol:'B',name:'البورون',en:'Boron',val:['+3']},
+{symbol:'C',name:'الكربون',en:'Carbon',val:['+4','-4']},
+{symbol:'N',name:'النيتروجين',en:'Nitrogen',val:['+5','-3']},
+{symbol:'O',name:'الأكسجين',en:'Oxygen',val:['-2']},
+{symbol:'F',name:'الفلور',en:'Fluorine',val:['-1']},
+{symbol:'Ne',name:'النيون',en:'Neon',val:['0']},
+{symbol:'Na',name:'الصوديوم',en:'Sodium',val:['+1']},
+{symbol:'Mg',name:'المغنيسيوم',en:'Magnesium',val:['+2']},
+{symbol:'Al',name:'الألمنيوم',en:'Aluminium',val:['+3']},
+{symbol:'Si',name:'السيليكون',en:'Silicon',val:['+4','-4']},
+{symbol:'P',name:'الفسفور',en:'Phosphorus',val:['+5','-3']},
+{symbol:'S',name:'الكبريت',en:'Sulfur',val:['-2','+6']},
+{symbol:'Cl',name:'الكلور',en:'Chlorine',val:['-1','+1','+5','+7']},
+{symbol:'Ar',name:'الأرجون',en:'Argon',val:['0']},
+{symbol:'K',name:'البوتاسيوم',en:'Potassium',val:['+1']},
+{symbol:'Ca',name:'الكالسيوم',en:'Calcium',val:['+2']}
+];
+
+const menu=document.getElementById('menu'), game=document.getElementById('game');
+const menuQuiz=document.getElementById('menuQuiz'), menuVal=document.getElementById('menuVal');
+const backMenu=document.getElementById('backMenu'), clearSaveBtn=document.getElementById('clearSave');
+const toggleMode=document.getElementById('toggleMode');
+const quizDiv=document.getElementById('quiz'), qName=document.getElementById('qName'), timerEl=document.getElementById('timer'), answerInput=document.getElementById('answer'), submitBtn=document.getElementById('submit'), streakEl=document.getElementById('streak'), xpEl=document.getElementById('xp'), rankEl=document.getElementById('rank'), timebar=document.getElementById('timebar');
+const valDiv=document.getElementById('valency'), valPrompt=document.getElementById('valPrompt'), valTimerEl=document.getElementById('valTimer'), valAnswer=document.getElementById('valAnswer'), valSubmit=document.getElementById('valSubmit'), valStreakEl=document.getElementById('valStreak'), valTimebar=document.getElementById('valTimebar');
+const loseScreen=document.getElementById('loseScreen'), loseAnswerEl=document.getElementById('loseAnswer');
+const celebration=document.getElementById('celebration');
+
+let xp=0, streak=0, current=null, quizList=[], quizIndex=0, valList=[], valIndex=0, timer=null, timeLeft=0, currentMode=null;
+const LS_KEY='periodic_game_state_v3';
+const correctSound=new Audio('https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3');
+const wrongSound=new Audio('https://assets.mixkit.co/sfx/preview/mixkit-wrong-buzz-907.mp3');
+
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}}
+function showMenu(){menu.classList.remove('hidden'); game.classList.add('hidden'); hideAllModes(); currentMode=null; clearRunningTimer();}
+function showGame(){menu.classList.add('hidden'); game.classList.remove('hidden');}
+function hideAllModes(){quizDiv.classList.add('hidden'); valDiv.classList.add('hidden');}
+function clearRunningTimer(){if(timer){clearInterval(timer); timer=null;}}
+function normalizeValInput(s){if(!s) return null;s=s.toString().trim().replace(/\s+/g,'');if(/^[+-]?\d+$/.test(s)){if(s==='0'||s==='+0'||s==='-0')return'0'; if(/^[+-]/.test(s))return (s[0]==='+')?('+'+parseInt(s,10)):'-'+Math.abs(parseInt(s,10)); return '+'+parseInt(s,10);} return null;}
+function valAcceptedFor(elem,answerNormalized){if(!elem||!elem.val)return false; return elem.val.some(v=>{if(v==='0')return answerNormalized==='0'; return v===answerNormalized;});}
+
+// --- Save / Load ---
+function saveState(){const st={xp, streak, currentMode, quizIndex, quizListSymbols:quizList.map(e=>e.symbol), valIndex, valListSymbols:valList.map(e=>e.symbol), settings:{difficulty:document.getElementById('difficulty').value, timeLimit:document.getElementById('timeLimit').value}}; localStorage.setItem(LS_KEY,JSON.stringify(st));}
+function loadState(){try{const raw=localStorage.getItem(LS_KEY); if(!raw) return false; const st=JSON.parse(raw); xp=st.xp||0; streak=st.streak||0; if(st.quizListSymbols){quizList=st.quizListSymbols.map(sym=>elements.find(e=>e.symbol===sym)).filter(Boolean); quizIndex=st.quizIndex||0;} if(st.valListSymbols){valList=st.valListSymbols.map(sym=>elements.find(e=>e.symbol===sym)).filter(Boolean); valIndex=st.valIndex||0;} if(st.settings){document.getElementById('difficulty').value=st.settings.difficulty||'medium'; document.getElementById('timeLimit').value=st.settings.timeLimit||'12';} updateStats(false); return true;}catch(e){console.warn('load failed',e); return false;}}
+
+// --- Stats ---
+const tiers=[
+  {xp:0,name:'متعلم مبتدئ'},
+  {xp:50,name:'متعلم متقدم'},
+  {xp:150,name:'خبير العناصر'},
+  {xp:300,name:'مايسترو الكيمياء'},
+  {xp:600,name:'السيد الخارق'},
+  {xp:1500,name:'سيد العناصر المزيف'} // "The Fake Master of the Elements" in Arabic
+];
+
+function showCelebration(text){
+  clearRunningTimer();
+  celebration.textContent=text;
+  celebration.classList.add('show');
+  setTimeout(()=>{celebration.classList.remove('show'); if(currentMode==='quiz') startQuizTimer();},2000);
+}
+
+function updateStats(checkCelebration=true){
+  document.getElementById('streak').textContent=streak;
+  document.getElementById('valStreak').textContent=streak;
+  xpEl.textContent=xp;
+  let oldRank = rankEl.textContent;
+  let r=tiers[0].name; 
+  for(let i=tiers.length-1;i>=0;i--){if(xp>=tiers[i].xp){r=tiers[i].name; break;}}
+  rankEl.textContent=r;
+  if(checkCelebration && r!==oldRank){showCelebration(`🎉 تهانينا! لقد وصلت إلى رتبة: ${r} 🎉`);}
+}
+
+// --- Menu wiring ---
+menuQuiz.onclick=()=>{showGame(); hideAllModes(); quizDiv.classList.remove('hidden'); currentMode='quiz'; startQuiz();}
+menuVal.onclick=()=>{showGame(); hideAllModes(); valDiv.classList.remove('hidden'); currentMode='valency'; startValency();}
+backMenu.onclick=()=>showMenu();
+clearSaveBtn.onclick=()=>{localStorage.removeItem(LS_KEY); location.reload();}
+toggleMode.onchange=()=>{document.body.classList.toggle('light',toggleMode.checked);}
+
+// --- Quiz ---
+function startQuiz(){if(quizList.length===0){quizList=elements.slice(); shuffle(quizList);} if(quizIndex>=quizList.length) quizIndex=0; nextQuiz();}
+function nextQuiz(){clearRunningTimer(); const el=quizList[quizIndex]; current=el; qName.textContent=el.name; answerInput.value=''; timeLeft=parseInt(document.getElementById('timeLimit').value); timerEl.textContent=timeLeft; timebar.style.width='100%'; startQuizTimer();}
+function startQuizTimer(){timer= setInterval(()=>{if(timeLeft<=0){clearRunningTimer(); showLose(current.symbol);} else{timeLeft--; timerEl.textContent=timeLeft; timebar.style.width=(timeLeft/parseInt(document.getElementById('timeLimit').value)*100)+'%';}},1000);}
+function submitAnswer(){const ans=answerInput.value.trim(); if(!ans) return; const correct=ans.toUpperCase()===current.symbol.toUpperCase(); if(correct){correctSound.play(); streak++; xp+=10;} else{wrongSound.play(); streak=0; xp=Math.max(0,xp-5); showLose(current.symbol);} quizIndex++; updateStats(); saveState(); if(correct) nextQuiz();}
+submitBtn.onclick=submitAnswer; answerInput.addEventListener('keydown',e=>{if(e.key==='Enter') submitAnswer();});
+
+// --- Valency ---
+function startValency(){if(valList.length===0){valList=elements.slice(); shuffle(valList);} if(valIndex>=valList.length) valIndex=0; nextVal();}
+function nextVal(){clearRunningTimer(); const el=valList[valIndex]; current=el; valPrompt.textContent=el.name; valAnswer.value=''; timeLeft=parseInt(document.getElementById('timeLimit').value); valTimerEl.textContent=timeLeft; valTimebar.style.width='100%'; startValTimer();}
+function startValTimer(){timer= setInterval(()=>{if(timeLeft<=0){clearRunningTimer(); showValLose(current.val.join('/'));} else{timeLeft--; valTimerEl.textContent=timeLeft; valTimebar.style.width=(timeLeft/parseInt(document.getElementById('timeLimit').value)*100)+'%';}},1000);}
+function submitVal(){const ans=normalizeValInput(valAnswer.value); if(ans && valAcceptedFor(current,ans)){correctSound.play(); streak++; xp+=10;} else{wrongSound.play(); streak=0; xp=Math.max(0,xp-5); showValLose(current.val.join('/'));} valIndex++; updateStats(); saveState(); if(ans && valAcceptedFor(current,ans)) nextVal();}
+valSubmit.onclick=submitVal; valAnswer.addEventListener('keydown',e=>{if(e.key==='Enter') submitVal();});
+
+// --- Lose screens ---
+function showLose(ans){loseAnswerEl.textContent=ans; loseScreen.classList.add('show'); clearRunningTimer(); setTimeout(()=>{loseScreen.classList.remove('show'); nextQuiz();},2000);}
+function showValLose(ans){loseAnswerEl.textContent=ans; loseScreen.classList.add('show'); clearRunningTimer(); setTimeout(()=>{loseScreen.classList.remove('show'); nextVal();},2000);}
+
+// --- Init ---
+loadState();
+updateStats(false);
+showMenu();
+</script>
+</body>
+</html>
