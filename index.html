@@ -310,6 +310,7 @@ const tiers=[
 // --- Globals & DOM ---
 let currentLang = 'ar';
 const LS_KEY='periodic_game_v5_select';
+let activeTimer = null; // Track active timer
 
 const menu=document.getElementById('menu'), game=document.getElementById('game');
 const menuQuiz=document.getElementById('menuQuiz'), menuVal=document.getElementById('menuVal');
@@ -320,13 +321,13 @@ const valDiv=document.getElementById('valency'), valPrompt=document.getElementBy
 const loseScreen=document.getElementById('loseScreen'), loseAnswerEl=document.getElementById('loseAnswer');
 const celebration=document.getElementById('celebration');
 
-let xp=0, streak=0, current=null, quizList=[], quizIndex=0, valList=[], valIndex=0, timer=null, timeLeft=0, currentMode=null;
+let xp=0, streak=0, current=null, quizList=[], quizIndex=0, valList=[], valIndex=0, timeLeft=0, currentMode=null;
 const correctSound=new Audio('https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3');
 const wrongSound=new Audio('https://assets.mixkit.co/sfx/preview/mixkit-wrong-buzz-907.mp3');
 
 // --- Helper Functions ---
 function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}}
-function clearRunningTimer(){if(timer){clearInterval(timer); timer=null;}}
+function clearAllTimers(){if(activeTimer){clearInterval(activeTimer); activeTimer=null;}}
 function normalizeValInput(s){if(!s) return null;s=s.toString().trim().replace(/\s+/g,'');if(/^[+-]?\d+$/.test(s)){if(s==='0'||s==='+0'||s==='-0')return'0'; if(/^[+-]/.test(s))return (s[0]==='+')?('+'+parseInt(s,10)):'-'+Math.abs(parseInt(s,10)); return '+'+parseInt(s,10);} return null;}
 function valAcceptedFor(elem,answerNormalized){if(!elem||!elem.val)return false; return elem.val.some(v=>{if(v==='0')return answerNormalized==='0'; return v===answerNormalized;});}
 
@@ -427,7 +428,7 @@ function updateStats(checkCelebration=true){
 }
 
 function showCelebration(rankName){
-  clearRunningTimer();
+  clearAllTimers();
   const t = dictionary[currentLang];
   document.getElementById('celText').innerHTML = t.cel + "<br><strong style='font-size:7vh;display:block;margin-top:2vh'>" + rankName + "</strong>";
   celebration.classList.add('show');
@@ -439,11 +440,17 @@ function showCelebration(rankName){
 }
 
 function showMenu(){
+  clearAllTimers();
   menu.classList.remove('hidden'); 
   game.classList.add('hidden'); 
   hideAllModes(); 
   currentMode=null; 
-  clearRunningTimer();
+  
+  // Reset timer displays
+  timerEl.textContent = '--';
+  valTimerEl.textContent = '--';
+  timebar.style.width = '100%';
+  valTimebar.style.width = '100%';
 }
 
 function showGame(){
@@ -458,6 +465,7 @@ function hideAllModes(){
 
 // --- Quiz Mode ---
 function startQuiz(){
+  clearAllTimers();
   quizList=elements.slice(); 
   shuffle(quizList); 
   quizIndex=0; 
@@ -465,7 +473,7 @@ function startQuiz(){
 }
 
 function nextQuiz(){
-  clearRunningTimer();
+  clearAllTimers();
   if(quizIndex>=quizList.length){ quizList=elements.slice(); shuffle(quizList); quizIndex=0; }
   
   const el=quizList[quizIndex]; 
@@ -482,14 +490,15 @@ function nextQuiz(){
 }
 
 function startQuizTimer(){
-  timer= setInterval(()=>{
+  clearAllTimers();
+  activeTimer = setInterval(()=>{
     timeLeft--; 
     timerEl.textContent=timeLeft; 
     const totalTime = parseInt(document.getElementById('timeLimit').value);
     timebar.style.width=((timeLeft/totalTime)*100)+'%';
     
     if(timeLeft<=0){
-      clearRunningTimer(); 
+      clearAllTimers(); 
       showLose(current.symbol);
     }
   },1000);
@@ -518,6 +527,7 @@ function submitQuizAnswer(){
 
 // --- Valency Mode ---
 function startValency(){
+  clearAllTimers();
   valList=elements.slice(); 
   shuffle(valList); 
   valIndex=0; 
@@ -525,7 +535,7 @@ function startValency(){
 }
 
 function nextVal(){
-  clearRunningTimer();
+  clearAllTimers();
   if(valIndex>=valList.length){ valList=elements.slice(); shuffle(valList); valIndex=0; }
   
   const el=valList[valIndex]; 
@@ -541,14 +551,15 @@ function nextVal(){
 }
 
 function startValTimer(){
-  timer= setInterval(()=>{
+  clearAllTimers();
+  activeTimer = setInterval(()=>{
     timeLeft--; 
     valTimerEl.textContent=timeLeft; 
     const totalTime = parseInt(document.getElementById('timeLimit').value);
     valTimebar.style.width=((timeLeft/totalTime)*100)+'%';
     
     if(timeLeft<=0){
-      clearRunningTimer(); 
+      clearAllTimers(); 
       showLose(current.val.join(' / '));
     }
   },1000);
@@ -575,7 +586,7 @@ function submitValAnswer(){
 
 // --- Lose Screen ---
 function showLose(correctStr){
-  clearRunningTimer();
+  clearAllTimers();
   loseAnswerEl.textContent=correctStr; 
   loseScreen.classList.add('show'); 
   setTimeout(()=>{
@@ -587,6 +598,7 @@ function showLose(correctStr){
 
 // --- Events ---
 menuQuiz.onclick=()=>{
+  clearAllTimers();
   showGame(); 
   hideAllModes(); 
   quizDiv.classList.remove('hidden'); 
@@ -595,6 +607,7 @@ menuQuiz.onclick=()=>{
 };
 
 menuVal.onclick=()=>{
+  clearAllTimers();
   showGame(); 
   hideAllModes(); 
   valDiv.classList.remove('hidden'); 
@@ -602,7 +615,11 @@ menuVal.onclick=()=>{
   startValency();
 };
 
-backMenu.onclick=()=>showMenu();
+backMenu.onclick=()=>{
+  clearAllTimers();
+  showMenu();
+};
+
 clearSaveBtn.onclick=()=>{localStorage.removeItem(LS_KEY); location.reload();}
 toggleMode.onchange=()=>{document.body.classList.toggle('light',toggleMode.checked);}
 langSelect.onchange=()=>{
