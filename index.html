@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>لعبة العناصر الدورية — كامل</title>
+<title>لعبة العناصر</title>
 <style>
 :root{
   --bg-dark:#0f1720; --bg-light:#f5f5f5;
@@ -12,107 +12,118 @@
   --muted-dark:#9ca3af; --muted-light:#555;
   --accent:#06b6d4; --ok:#10b981; --bad:#ef4444;
 }
-html,body{margin:0; padding:0; width:100%; height:100%; font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial; background:var(--bg-dark); color:var(--text-dark);}
+html,body{margin:0; padding:0; width:100%; height:100%; font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial; background:var(--bg-dark); color:var(--text-dark); transition: background 0.3s, color 0.3s;}
 body.light{background:var(--bg-light); color:var(--text-light);}
+/* LTR support for English */
+html[lang="en"] { direction: ltr; }
+
 .wrap{width:100vw; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding:2vh 2vw; box-sizing:border-box; overflow-y:auto;}
 h1{text-align:center; margin:1vh 0 2vh; font-size:5vh;}
-button{cursor:pointer; border:0; border-radius:1vh; padding:1.5vh 3vw; font-size:3vh;}
+button{cursor:pointer; border:0; border-radius:1vh; padding:1.5vh 3vw; font-size:2.5vh; font-weight:bold; transition: transform 0.1s;}
+button:active{transform:scale(0.98);}
 .primary{background:var(--accent); color:#042; box-shadow:0 0.5vh 1vh rgba(6,182,212,.2);}
 .danger{background:var(--bad); color:#fff;}
-.hidden{display:none;}
+.hidden{display:none !important;}
 .card{background:rgba(255,255,255,0.02); border-radius:1vh; margin-top:1vh; border:0.2vh solid rgba(255,255,255,0.03); width:95%; padding:2vh 2vw; box-sizing:border-box; font-size:3vh;}
-.controls{display:flex; flex-wrap:wrap; justify-content:space-around; margin-top:2vh; font-size:2.5vh;}
+.controls{display:flex; flex-wrap:wrap; justify-content:space-around; margin-top:2vh; font-size:2.2vh;}
 .row{display:flex; justify-content:space-between; align-items:center; width:100%; margin:1vh 0;}
-input[type="text"]{padding:2vh 1vw; font-size:3vh; border-radius:0.5vh; border:0; width:95%; box-sizing:border-box;}
+input[type="text"]{padding:2vh 1vw; font-size:3vh; border-radius:0.5vh; border:0; width:95%; box-sizing:border-box; text-align:center;}
 select{padding:1vh 1vw; font-size:2.5vh; border-radius:0.5vh; border:0;}
 .progress{height:3vh; background:rgba(255,255,255,0.06); border-radius:1vh; overflow:hidden;}
-.bar{height:100%; background:linear-gradient(90deg,#06b6d4,#10b981); width:0%;}
+.bar{height:100%; background:linear-gradient(90deg,#06b6d4,#10b981); width:0%; transition: width 1s linear;}
 .rank{padding:0.5vh 1vw; border-radius:10vh; font-size:2.5vh; background:rgba(255,255,255,0.03); display:inline-block;}
-#loseScreen{position:fixed; top:0; left:0; width:100vw; height:100vh; background:linear-gradient(90deg,#3b0b0b,#7b1212); display:flex; align-items:center; justify-content:center; flex-direction:column; font-size:5vh; color:#fff; z-index:999; text-align:center; opacity:0; pointer-events:none; transition:opacity .25s;}
+#loseScreen{position:fixed; top:0; left:0; width:100vw; height:100vh; background:linear-gradient(90deg,#3b0b0b,#7b1212); display:flex; align-items:center; justify-content:center; flex-direction:column; font-size:4vh; color:#fff; z-index:999; text-align:center; opacity:0; pointer-events:none; transition:opacity .25s;}
 #loseScreen.show{opacity:1; pointer-events:auto;}
-#menu{text-align:center; width:100%;}
-#menu button{width:60%; margin:1vh 0;}
+#menu{text-align:center; width:100%; max-width: 600px;}
+#menu button{width:80%; margin:1vh 0;}
 body.light .card{background:#fff; border:0.2vh solid #ddd;}
 body.light button{background:var(--card-light); color:var(--text-light);}
-#celebration{position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(255,255,255,0.9); display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:6vh; color:#10b981; z-index:1000; text-align:center; opacity:0; pointer-events:none; transition:opacity 0.3s;}
+body.light .primary{background:var(--accent); color:#fff;}
+body.light .danger{background:var(--bad); color:#fff;}
+
+#celebration{position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(255,255,255,0.95); display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:5vh; color:#10b981; z-index:1000; text-align:center; opacity:0; pointer-events:none; transition:opacity 0.3s; padding: 20px;}
 #celebration.show{opacity:1; pointer-events:auto;}
+.settings-row { display: flex; justify-content: center; gap: 20px; margin-top: 2vh; align-items: center;}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div id="menu">
-    <h1>⚛️ لعبة العناصر الدورية</h1>
-    <button id="menuQuiz" class="primary">🧪 وضع الاختبار</button>
-    <button id="menuVal" class="primary">⚖️ التكافؤات (Valency)</button>
-    <div style="margin-top:2vh">
-      <button id="clearSave" class="danger">مسح الحفظ</button>
+    <h1 id="titleText">⚛️ لعبة العناصر</h1>
+    <button id="menuQuiz" class="primary">🧪 تحدي رموز العناصر</button>
+    <button id="menuVal" class="primary">⚖️ تحدي تكافؤات العناصر</button>
+    
+    <div style="margin-top:4vh">
+      <button id="clearSave" class="danger">🗑️ مسح الحفظ (Reset)</button>
     </div>
-    <div style="margin-top:2vh">
-      <label><input id="toggleMode" type="checkbox"> وضع النهار / الليل</label>
+    
+    <div class="settings-row">
+       <label><input id="toggleMode" type="checkbox"> <span id="lblMode">نهار/ليل</span></label>
+       <label><input id="toggleLang" type="checkbox"> <span id="lblLang">English</span></label>
     </div>
   </div>
 
   <div id="game" class="hidden">
     <div style="text-align:center;margin-bottom:2vh">
-      <button id="backMenu" class="danger">⬅ العودة للقائمة الرئيسية</button>
+      <button id="backMenu" class="danger">⬅ <span id="txtBack">العودة</span></button>
     </div>
 
     <div class="controls">
-      <div class="row">مستوى الصعوبة:
+      <div class="row"><span id="lblDiff">الصعوبة</span>:
         <select id="difficulty">
-          <option value="easy">سهل</option>
-          <option value="medium" selected>متوسط</option>
-          <option value="hard">صعب</option>
+          <option value="easy" id="optEasy">سهل</option>
+          <option value="medium" selected id="optMed">متوسط</option>
+          <option value="hard" id="optHard">صعب</option>
         </select>
       </div>
-      <div class="row">زمن السؤال:
+      <div class="row"><span id="lblTime">الوقت</span>:
         <select id="timeLimit">
-          <option value="8">8 ث</option>
-          <option value="12" selected>12 ث</option>
-          <option value="20">20 ث</option>
+          <option value="8">8s</option>
+          <option value="12" selected>12s</option>
+          <option value="20">20s</option>
         </select>
       </div>
-      <div class="row">خبرة (XP): <span id="xp">0</span></div>
-      <div class="row">رتبة: <span id="rank" class="rank">متعلم مبتدئ</span></div>
+      <div class="row"><span id="lblXP">خبرة</span>: <span id="xp">0</span></div>
+      <div class="row"><span id="lblRank">رتبة</span>: <span id="rank" class="rank">...</span></div>
     </div>
 
     <div id="quiz" class="card hidden">
-      <div style="display:flex;justify-content:space-between;align-items:center;font-size:2.5vh">
-        <div>🧪 اختبار — سترى اسم العنصر وأدخل الرمز</div>
-        <div>الوقت: <span id="timer">--</span> ث</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:2vh">
+        <div id="quizHeader">🧪 اكتب الرمز</div>
+        <div><span id="quizTimerLbl">الوقت</span>: <span id="timer">--</span></div>
       </div>
       <div id="quizInfo" class="card" style="margin-top:1vh;text-align:center;font-size:5vh">
         <div id="qName" style="font-weight:700">—</div>
       </div>
       <div style="margin-top:1vh">
-        <input id="answer" placeholder="اكتب الرمز (مثال: H)" autocomplete="off" />
-        <div style="display:flex;gap:2vw;margin-top:1vh">
-          <button id="submit" class="primary">تحقق</button>
+        <input id="answer" placeholder="Symbol (e.g. H)" autocomplete="off" />
+        <div style="display:flex;gap:2vw;margin-top:1vh; justify-content:center;">
+          <button id="submit" class="primary">✔ <span id="btnCheck1">تحقق</span></button>
         </div>
       </div>
       <div style="margin-top:1vh;display:flex;justify-content:space-between;align-items:center">
-        <div>السلسلة: <span id="streak">0</span></div>
+        <div><span id="streakLbl1">السلسلة</span>: <span id="streak">0</span></div>
         <div style="width:40%"><div class="progress"><div id="timebar" class="bar"></div></div></div>
       </div>
     </div>
 
     <div id="valency" class="card hidden">
-      <div style="display:flex;justify-content:space-between;align-items:center;font-size:2.5vh">
-        <div>⚖️ التكافؤات — أدخل الشحنة (مثال: +1 أو -2 أو 0)</div>
-        <div>الوقت: <span id="valTimer">--</span> ث</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:2vh">
+        <div id="valHeader">⚖️ أدخل الشحنة (+1, -2...)</div>
+        <div><span id="valTimerLbl">الوقت</span>: <span id="valTimer">--</span></div>
       </div>
       <div id="valInfo" class="card" style="margin-top:1vh;text-align:center;font-size:5vh">
         <div id="valPrompt" style="font-weight:700">—</div>
-        <div class="small-muted" style="margin-top:1vh">(سيُقبل إدخال بدون إشارة كقيمة موجبة)</div>
+        <div class="small-muted" style="margin-top:1vh; font-size:2vh; opacity:0.7" id="valNote">(بدون إشارة = موجب)</div>
       </div>
       <div style="margin-top:1vh">
-        <input id="valAnswer" placeholder="مثال: +1 أو -2 أو 0" autocomplete="off" />
-        <div style="display:flex;gap:2vw;margin-top:1vh">
-          <button id="valSubmit" class="primary">تحقق</button>
+        <input id="valAnswer" placeholder="+1, -2, 0" autocomplete="off" />
+        <div style="display:flex;gap:2vw;margin-top:1vh; justify-content:center;">
+          <button id="valSubmit" class="primary">✔ <span id="btnCheck2">تحقق</span></button>
         </div>
       </div>
       <div style="margin-top:1vh;display:flex;justify-content:space-between;align-items:center">
-        <div>السلسلة: <span id="valStreak">0</span></div>
+        <div><span id="streakLbl2">السلسلة</span>: <span id="valStreak">0</span></div>
         <div style="width:40%"><div class="progress"><div id="valTimebar" class="bar"></div></div></div>
       </div>
     </div>
@@ -121,13 +132,16 @@ body.light button{background:var(--card-light); color:var(--text-light);}
 </div>
 
 <div id="loseScreen">
-  <div id="loseText">❌ إجابة خاطئة! الإجابة الصحيحة: <strong id="loseAnswer"></strong></div>
+  <div id="loseText">
+    <div style="margin-bottom:20px">❌ <span id="txtWrong">إجابة خاطئة!</span></div>
+    <div style="font-size:3vh"><span id="txtCorrectIs">الصحيح هو</span>: <strong id="loseAnswer" style="color:#4ade80; font-size:6vh; display:block; margin-top:10px"></strong></div>
+  </div>
 </div>
 
-<div id="celebration">🎉 تهانينا! لقد حصلت على رتبة جديدة! 🎉</div>
+<div id="celebration"><span id="celText">🎉 تهانينا!</span></div>
 
 <script>
-// FULL JS LOGIC
+// --- Data ---
 const elements=[
 {symbol:'H',name:'الهيدروجين',en:'Hydrogen',val:['+1']},
 {symbol:'He',name:'الهيليوم',en:'Helium',val:['0']},
@@ -151,88 +165,379 @@ const elements=[
 {symbol:'Ca',name:'الكالسيوم',en:'Calcium',val:['+2']}
 ];
 
+// --- Translation Dictionary ---
+const dictionary = {
+  ar: {
+    title: "⚛️ لعبة العناصر",
+    btnQuiz: "🧪 تحدي رموز العناصر",
+    btnVal: "⚖️ تحدي تكافؤات العناصر",
+    reset: "🗑️ مسح الحفظ",
+    mode: "نهار/ليل",
+    back: "العودة",
+    diff: "الصعوبة",
+    time: "الوقت",
+    xp: "خبرة",
+    rank: "رتبة",
+    easy: "سهل", med: "متوسط", hard: "صعب",
+    qHeader: "🧪 اختبار — ما هو الرمز؟",
+    phSym: "اكتب الرمز (مثال: H)",
+    check: "تحقق",
+    streak: "السلسلة",
+    vHeader: "⚖️ التكافؤات — أدخل الشحنة",
+    vNote: "(بدون إشارة = موجب)",
+    wrong: "إجابة خاطئة!",
+    correctIs: "الإجابة الصحيحة هي",
+    cel: "🎉 تهانينا! لقد وصلت إلى رتبة:",
+    langBtn: "English"
+  },
+  en: {
+    title: "⚛️ Elements Game",
+    btnQuiz: "🧪 Symbol Challenge",
+    btnVal: "⚖️ Valency Challenge",
+    reset: "🗑️ Reset Save",
+    mode: "Day/Night",
+    back: "Back",
+    diff: "Difficulty",
+    time: "Time",
+    xp: "XP",
+    rank: "Rank",
+    easy: "Easy", med: "Medium", hard: "Hard",
+    qHeader: "🧪 Quiz — What is the Symbol?",
+    phSym: "Type symbol (e.g. H)",
+    check: "Check",
+    streak: "Streak",
+    vHeader: "⚖️ Valency — Enter Charge",
+    vNote: "(No sign = Positive)",
+    wrong: "Wrong Answer!",
+    correctIs: "Correct answer:",
+    cel: "🎉 Congrats! New Rank:",
+    langBtn: "عربي"
+  }
+};
+
+const tiers=[
+  {xp:0,name:'متعلم مبتدئ', en:'Novice Learner'},
+  {xp:50,name:'متعلم متقدم', en:'Advanced Learner'},
+  {xp:150,name:'خبير العناصر', en:'Element Expert'},
+  {xp:300,name:'مايسترو الكيمياء', en:'Chemistry Maestro'},
+  {xp:600,name:'السيد الخارق', en:'Super Master'},
+  {xp:1500,name:'سيد العناصر المزيف', en:'Fake Master'}
+];
+
+// --- Globals & DOM ---
+let currentLang = 'ar'; // Default
+const LS_KEY='periodic_game_v4';
+
 const menu=document.getElementById('menu'), game=document.getElementById('game');
 const menuQuiz=document.getElementById('menuQuiz'), menuVal=document.getElementById('menuVal');
 const backMenu=document.getElementById('backMenu'), clearSaveBtn=document.getElementById('clearSave');
-const toggleMode=document.getElementById('toggleMode');
+const toggleMode=document.getElementById('toggleMode'), toggleLang=document.getElementById('toggleLang');
 const quizDiv=document.getElementById('quiz'), qName=document.getElementById('qName'), timerEl=document.getElementById('timer'), answerInput=document.getElementById('answer'), submitBtn=document.getElementById('submit'), streakEl=document.getElementById('streak'), xpEl=document.getElementById('xp'), rankEl=document.getElementById('rank'), timebar=document.getElementById('timebar');
 const valDiv=document.getElementById('valency'), valPrompt=document.getElementById('valPrompt'), valTimerEl=document.getElementById('valTimer'), valAnswer=document.getElementById('valAnswer'), valSubmit=document.getElementById('valSubmit'), valStreakEl=document.getElementById('valStreak'), valTimebar=document.getElementById('valTimebar');
 const loseScreen=document.getElementById('loseScreen'), loseAnswerEl=document.getElementById('loseAnswer');
 const celebration=document.getElementById('celebration');
 
 let xp=0, streak=0, current=null, quizList=[], quizIndex=0, valList=[], valIndex=0, timer=null, timeLeft=0, currentMode=null;
-const LS_KEY='periodic_game_state_v3';
 const correctSound=new Audio('https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3');
 const wrongSound=new Audio('https://assets.mixkit.co/sfx/preview/mixkit-wrong-buzz-907.mp3');
 
+// --- Helper Functions ---
 function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}}
-function showMenu(){menu.classList.remove('hidden'); game.classList.add('hidden'); hideAllModes(); currentMode=null; clearRunningTimer();}
-function showGame(){menu.classList.add('hidden'); game.classList.remove('hidden');}
-function hideAllModes(){quizDiv.classList.add('hidden'); valDiv.classList.add('hidden');}
 function clearRunningTimer(){if(timer){clearInterval(timer); timer=null;}}
 function normalizeValInput(s){if(!s) return null;s=s.toString().trim().replace(/\s+/g,'');if(/^[+-]?\d+$/.test(s)){if(s==='0'||s==='+0'||s==='-0')return'0'; if(/^[+-]/.test(s))return (s[0]==='+')?('+'+parseInt(s,10)):'-'+Math.abs(parseInt(s,10)); return '+'+parseInt(s,10);} return null;}
 function valAcceptedFor(elem,answerNormalized){if(!elem||!elem.val)return false; return elem.val.some(v=>{if(v==='0')return answerNormalized==='0'; return v===answerNormalized;});}
 
+// --- Localization Logic ---
+function applyLanguage(){
+  const t = dictionary[currentLang];
+  document.documentElement.lang = currentLang;
+  document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+  
+  // Update Menu
+  document.getElementById('titleText').textContent = t.title;
+  menuQuiz.textContent = t.btnQuiz;
+  menuVal.textContent = t.btnVal;
+  clearSaveBtn.textContent = t.reset;
+  document.getElementById('lblMode').textContent = t.mode;
+  document.getElementById('lblLang').textContent = t.langBtn;
+  
+  // Update Game UI
+  document.getElementById('txtBack').textContent = t.back;
+  document.getElementById('lblDiff').textContent = t.diff;
+  document.getElementById('lblTime').textContent = t.time;
+  document.getElementById('lblXP').textContent = t.xp;
+  document.getElementById('lblRank').textContent = t.rank;
+  document.getElementById('optEasy').textContent = t.easy;
+  document.getElementById('optMed').textContent = t.med;
+  document.getElementById('optHard').textContent = t.hard;
+  
+  // Quiz Specific
+  document.getElementById('quizHeader').textContent = t.qHeader;
+  answerInput.placeholder = t.phSym;
+  document.getElementById('btnCheck1').textContent = t.check;
+  document.getElementById('streakLbl1').textContent = t.streak;
+  document.getElementById('quizTimerLbl').textContent = t.time;
+
+  // Valency Specific
+  document.getElementById('valHeader').textContent = t.vHeader;
+  document.getElementById('valNote').textContent = t.vNote;
+  document.getElementById('btnCheck2').textContent = t.check;
+  document.getElementById('streakLbl2').textContent = t.streak;
+  document.getElementById('valTimerLbl').textContent = t.time;
+
+  // Lose Screen
+  document.getElementById('txtWrong').textContent = t.wrong;
+  document.getElementById('txtCorrectIs').textContent = t.correctIs;
+
+  updateStats(false); // Update rank name language
+  
+  // Refresh current question text if game is open
+  if(current){
+    if(currentMode==='quiz') qName.textContent = currentLang==='ar' ? current.name : current.en;
+    if(currentMode==='valency') valPrompt.textContent = currentLang==='ar' ? current.name : current.en;
+  }
+}
+
 // --- Save / Load ---
-function saveState(){const st={xp, streak, currentMode, quizIndex, quizListSymbols:quizList.map(e=>e.symbol), valIndex, valListSymbols:valList.map(e=>e.symbol), settings:{difficulty:document.getElementById('difficulty').value, timeLimit:document.getElementById('timeLimit').value}}; localStorage.setItem(LS_KEY,JSON.stringify(st));}
-function loadState(){try{const raw=localStorage.getItem(LS_KEY); if(!raw) return false; const st=JSON.parse(raw); xp=st.xp||0; streak=st.streak||0; if(st.quizListSymbols){quizList=st.quizListSymbols.map(sym=>elements.find(e=>e.symbol===sym)).filter(Boolean); quizIndex=st.quizIndex||0;} if(st.valListSymbols){valList=st.valListSymbols.map(sym=>elements.find(e=>e.symbol===sym)).filter(Boolean); valIndex=st.valIndex||0;} if(st.settings){document.getElementById('difficulty').value=st.settings.difficulty||'medium'; document.getElementById('timeLimit').value=st.settings.timeLimit||'12';} updateStats(false); return true;}catch(e){console.warn('load failed',e); return false;}}
-
-// --- Stats ---
-const tiers=[
-  {xp:0,name:'متعلم مبتدئ'},
-  {xp:50,name:'متعلم متقدم'},
-  {xp:150,name:'خبير العناصر'},
-  {xp:300,name:'مايسترو الكيمياء'},
-  {xp:600,name:'السيد الخارق'},
-  {xp:1500,name:'سيد العناصر المزيف'} // "The Fake Master of the Elements" in Arabic
-];
-
-function showCelebration(text){
-  clearRunningTimer();
-  celebration.textContent=text;
-  celebration.classList.add('show');
-  setTimeout(()=>{celebration.classList.remove('show'); if(currentMode==='quiz') startQuizTimer();},2000);
+function saveState(){
+  const st={
+    xp, streak, 
+    lang: currentLang,
+    settings:{
+      difficulty:document.getElementById('difficulty').value, 
+      timeLimit:document.getElementById('timeLimit').value
+    }
+  }; 
+  localStorage.setItem(LS_KEY,JSON.stringify(st));
 }
 
+function loadState(){
+  try{
+    const raw=localStorage.getItem(LS_KEY); 
+    if(!raw) return; 
+    const st=JSON.parse(raw); 
+    xp=st.xp||0; 
+    streak=st.streak||0; 
+    if(st.lang) { currentLang = st.lang; toggleLang.checked = (st.lang === 'en'); }
+    if(st.settings){
+      document.getElementById('difficulty').value=st.settings.difficulty||'medium'; 
+      document.getElementById('timeLimit').value=st.settings.timeLimit||'12';
+    } 
+    updateStats(false);
+  }catch(e){console.warn('load failed',e);}
+}
+
+// --- Core Game Flow ---
 function updateStats(checkCelebration=true){
-  document.getElementById('streak').textContent=streak;
-  document.getElementById('valStreak').textContent=streak;
+  streakEl.textContent=streak;
+  valStreakEl.textContent=streak;
   xpEl.textContent=xp;
+  
   let oldRank = rankEl.textContent;
-  let r=tiers[0].name; 
-  for(let i=tiers.length-1;i>=0;i--){if(xp>=tiers[i].xp){r=tiers[i].name; break;}}
-  rankEl.textContent=r;
-  if(checkCelebration && r!==oldRank){showCelebration(`🎉 تهانينا! لقد وصلت إلى رتبة: ${r} 🎉`);}
+  let rObj = tiers[0];
+  for(let i=tiers.length-1;i>=0;i--){if(xp>=tiers[i].xp){rObj=tiers[i]; break;}}
+  
+  const rankName = currentLang === 'ar' ? rObj.name : rObj.en;
+  rankEl.textContent = rankName;
+
+  if(checkCelebration && oldRank !== '...' && rankName !== oldRank){
+    showCelebration(rankName);
+  }
 }
 
-// --- Menu wiring ---
-menuQuiz.onclick=()=>{showGame(); hideAllModes(); quizDiv.classList.remove('hidden'); currentMode='quiz'; startQuiz();}
-menuVal.onclick=()=>{showGame(); hideAllModes(); valDiv.classList.remove('hidden'); currentMode='valency'; startValency();}
+function showCelebration(rankName){
+  clearRunningTimer();
+  const t = dictionary[currentLang];
+  document.getElementById('celText').innerHTML = t.cel + "<br><strong style='font-size:7vh;display:block;margin-top:2vh'>" + rankName + "</strong>";
+  celebration.classList.add('show');
+  setTimeout(()=>{
+    celebration.classList.remove('show'); 
+    if(currentMode==='quiz') startQuizTimer();
+    if(currentMode==='valency') startValTimer();
+  },2500);
+}
+
+function showMenu(){
+  menu.classList.remove('hidden'); 
+  game.classList.add('hidden'); 
+  hideAllModes(); 
+  currentMode=null; 
+  clearRunningTimer(); // BUG FIX: Timer cleanup
+}
+
+function showGame(){
+  menu.classList.add('hidden'); 
+  game.classList.remove('hidden');
+}
+
+function hideAllModes(){
+  quizDiv.classList.add('hidden'); 
+  valDiv.classList.add('hidden');
+}
+
+// --- Quiz Mode ---
+function startQuiz(){
+  // Always shuffle for a new session or ensures valid list
+  quizList=elements.slice(); 
+  shuffle(quizList); 
+  quizIndex=0; 
+  nextQuiz();
+}
+
+function nextQuiz(){
+  clearRunningTimer();
+  if(quizIndex>=quizList.length){ quizList=elements.slice(); shuffle(quizList); quizIndex=0; }
+  
+  const el=quizList[quizIndex]; 
+  current=el; 
+  qName.textContent = currentLang==='ar' ? el.name : el.en;
+  
+  answerInput.value=''; 
+  timeLeft=parseInt(document.getElementById('timeLimit').value); 
+  timerEl.textContent=timeLeft; 
+  timebar.style.width='100%'; 
+  timebar.style.transition = 'width 1s linear';
+  startQuizTimer();
+}
+
+function startQuizTimer(){
+  timer= setInterval(()=>{
+    timeLeft--; 
+    timerEl.textContent=timeLeft; 
+    const totalTime = parseInt(document.getElementById('timeLimit').value);
+    timebar.style.width=((timeLeft/totalTime)*100)+'%';
+    
+    if(timeLeft<=0){
+      clearRunningTimer(); 
+      showLose(current.symbol);
+    }
+  },1000);
+}
+
+function submitQuizAnswer(){
+  const ans=answerInput.value.trim(); 
+  if(!ans) return; 
+  const correct=ans.toUpperCase()===current.symbol.toUpperCase(); 
+  if(correct){
+    correctSound.play(); 
+    streak++; 
+    xp+=10; 
+    quizIndex++; 
+    updateStats(); 
+    saveState(); 
+    nextQuiz();
+  } else {
+    wrongSound.play(); 
+    streak=0; 
+    xp=Math.max(0,xp-5); 
+    updateStats();
+    showLose(current.symbol);
+  } 
+}
+
+// --- Valency Mode ---
+function startValency(){
+  valList=elements.slice(); 
+  shuffle(valList); 
+  valIndex=0; 
+  nextVal();
+}
+
+function nextVal(){
+  clearRunningTimer();
+  if(valIndex>=valList.length){ valList=elements.slice(); shuffle(valList); valIndex=0; }
+  
+  const el=valList[valIndex]; 
+  current=el; 
+  valPrompt.textContent = currentLang==='ar' ? el.name : el.en;
+  
+  valAnswer.value=''; 
+  timeLeft=parseInt(document.getElementById('timeLimit').value); 
+  valTimerEl.textContent=timeLeft; 
+  valTimebar.style.width='100%'; 
+  startValTimer();
+}
+
+function startValTimer(){
+  timer= setInterval(()=>{
+    timeLeft--; 
+    valTimerEl.textContent=timeLeft; 
+    const totalTime = parseInt(document.getElementById('timeLimit').value);
+    valTimebar.style.width=((timeLeft/totalTime)*100)+'%';
+    
+    if(timeLeft<=0){
+      clearRunningTimer(); 
+      showLose(current.val.join(' / '));
+    }
+  },1000);
+}
+
+function submitValAnswer(){
+  const ans=normalizeValInput(valAnswer.value); 
+  if(ans && valAcceptedFor(current,ans)){
+    correctSound.play(); 
+    streak++; 
+    xp+=10; 
+    valIndex++; 
+    updateStats(); 
+    saveState(); 
+    nextVal();
+  } else {
+    wrongSound.play(); 
+    streak=0; 
+    xp=Math.max(0,xp-5); 
+    updateStats();
+    showLose(current.val.join(' / '));
+  } 
+}
+
+// --- Lose Screen ---
+function showLose(correctStr){
+  clearRunningTimer();
+  loseAnswerEl.textContent=correctStr; 
+  loseScreen.classList.add('show'); 
+  setTimeout(()=>{
+    loseScreen.classList.remove('show'); 
+    if(currentMode==='quiz') { quizIndex++; nextQuiz(); }
+    else if(currentMode==='valency') { valIndex++; nextVal(); }
+  },2500);
+}
+
+// --- Events ---
+menuQuiz.onclick=()=>{
+  showGame(); 
+  hideAllModes(); 
+  quizDiv.classList.remove('hidden'); 
+  currentMode='quiz'; 
+  startQuiz(); // Forces fresh question
+};
+
+menuVal.onclick=()=>{
+  showGame(); 
+  hideAllModes(); 
+  valDiv.classList.remove('hidden'); 
+  currentMode='valency'; 
+  startValency(); // Forces fresh question
+};
+
 backMenu.onclick=()=>showMenu();
 clearSaveBtn.onclick=()=>{localStorage.removeItem(LS_KEY); location.reload();}
 toggleMode.onchange=()=>{document.body.classList.toggle('light',toggleMode.checked);}
+toggleLang.onchange=()=>{
+  currentLang = toggleLang.checked ? 'en' : 'ar';
+  applyLanguage();
+  saveState();
+};
 
-// --- Quiz ---
-function startQuiz(){if(quizList.length===0){quizList=elements.slice(); shuffle(quizList);} if(quizIndex>=quizList.length) quizIndex=0; nextQuiz();}
-function nextQuiz(){clearRunningTimer(); const el=quizList[quizIndex]; current=el; qName.textContent=el.name; answerInput.value=''; timeLeft=parseInt(document.getElementById('timeLimit').value); timerEl.textContent=timeLeft; timebar.style.width='100%'; startQuizTimer();}
-function startQuizTimer(){timer= setInterval(()=>{if(timeLeft<=0){clearRunningTimer(); showLose(current.symbol);} else{timeLeft--; timerEl.textContent=timeLeft; timebar.style.width=(timeLeft/parseInt(document.getElementById('timeLimit').value)*100)+'%';}},1000);}
-function submitAnswer(){const ans=answerInput.value.trim(); if(!ans) return; const correct=ans.toUpperCase()===current.symbol.toUpperCase(); if(correct){correctSound.play(); streak++; xp+=10;} else{wrongSound.play(); streak=0; xp=Math.max(0,xp-5); showLose(current.symbol);} quizIndex++; updateStats(); saveState(); if(correct) nextQuiz();}
-submitBtn.onclick=submitAnswer; answerInput.addEventListener('keydown',e=>{if(e.key==='Enter') submitAnswer();});
+submitBtn.onclick=submitQuizAnswer; 
+answerInput.addEventListener('keydown',e=>{if(e.key==='Enter') submitQuizAnswer();});
 
-// --- Valency ---
-function startValency(){if(valList.length===0){valList=elements.slice(); shuffle(valList);} if(valIndex>=valList.length) valIndex=0; nextVal();}
-function nextVal(){clearRunningTimer(); const el=valList[valIndex]; current=el; valPrompt.textContent=el.name; valAnswer.value=''; timeLeft=parseInt(document.getElementById('timeLimit').value); valTimerEl.textContent=timeLeft; valTimebar.style.width='100%'; startValTimer();}
-function startValTimer(){timer= setInterval(()=>{if(timeLeft<=0){clearRunningTimer(); showValLose(current.val.join('/'));} else{timeLeft--; valTimerEl.textContent=timeLeft; valTimebar.style.width=(timeLeft/parseInt(document.getElementById('timeLimit').value)*100)+'%';}},1000);}
-function submitVal(){const ans=normalizeValInput(valAnswer.value); if(ans && valAcceptedFor(current,ans)){correctSound.play(); streak++; xp+=10;} else{wrongSound.play(); streak=0; xp=Math.max(0,xp-5); showValLose(current.val.join('/'));} valIndex++; updateStats(); saveState(); if(ans && valAcceptedFor(current,ans)) nextVal();}
-valSubmit.onclick=submitVal; valAnswer.addEventListener('keydown',e=>{if(e.key==='Enter') submitVal();});
+valSubmit.onclick=submitValAnswer; 
+valAnswer.addEventListener('keydown',e=>{if(e.key==='Enter') submitValAnswer();});
 
-// --- Lose screens ---
-function showLose(ans){loseAnswerEl.textContent=ans; loseScreen.classList.add('show'); clearRunningTimer(); setTimeout(()=>{loseScreen.classList.remove('show'); nextQuiz();},2000);}
-function showValLose(ans){loseAnswerEl.textContent=ans; loseScreen.classList.add('show'); clearRunningTimer(); setTimeout(()=>{loseScreen.classList.remove('show'); nextVal();},2000);}
-
-// --- Init ---
+// --- Initialization ---
 loadState();
-updateStats(false);
+applyLanguage();
 showMenu();
 </script>
 </body>
