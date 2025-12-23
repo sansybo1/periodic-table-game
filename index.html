@@ -6,35 +6,38 @@
 <title>لعبة العناصر والتكافؤات</title>
 <style>
 :root{
-  --bg-dark:#0f1720; --bg-light:#f5f5f5;
-  --card-dark:#1e293b; --card-light:#fff;
-  --text-dark:#e2e8f0; --text-light:#1e293b;
+  --bg-dark:#0f172a; --bg-light:#f8fafc;
+  --card-dark:#1e293b; --card-light:#ffffff;
+  --text-dark:#e2e8f0; --text-light:#0f172a;
   --accent:#06b6d4; --ok:#10b981; --bad:#ef4444;
 }
 
-/* Background with abstract chemical hex pattern */
+/* UPGRADED BACKGROUND: 
+   Uses a distinct Benzene Ring SVG pattern + Radial Gradients 
+*/
 body {
   margin:0; padding:0; width:100%; height:100%; 
   font-family:system-ui,-apple-system,'Segoe UI',Roboto,Arial; 
   transition: background 0.3s, color 0.3s;
   background-color: var(--bg-dark);
   color: var(--text-dark);
-  /* Abstract Hex Pattern */
+  /* The SVG below is a repeating chemical structure pattern */
   background-image: 
-    radial-gradient(circle at 15% 50%, rgba(6, 182, 212, 0.15), transparent 25%), 
-    radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.15), transparent 25%),
-    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.07'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    radial-gradient(circle at 10% 20%, rgba(6, 182, 212, 0.2), transparent 40%), 
+    radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.2), transparent 40%),
+    url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23334155' stroke-width='2' stroke-opacity='0.4'%3E%3Cpath d='M50 20 L76 35 L76 65 L50 80 L24 65 L24 35 Z' /%3E%3Cpath d='M50 20 L50 0 M76 35 L95 25 M76 65 L95 75 M50 80 L50 100 M24 65 L5 75 M24 35 L5 25' /%3E%3Ccircle cx='50' cy='50' r='12' stroke='%2306b6d4' stroke-width='1' stroke-opacity='0.2'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 100% 100%, 100% 100%, 120px 120px; /* SVG size increased */
 }
 
 body.light {
   background-color: var(--bg-light);
   color: var(--text-light);
+  /* Light mode version of the chemical structures */
   background-image: 
-    radial-gradient(circle at 15% 50%, rgba(6, 182, 212, 0.1), transparent 25%), 
-    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    radial-gradient(circle at 10% 20%, rgba(6, 182, 212, 0.1), transparent 40%), 
+    url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23cbd5e1' stroke-width='2'%3E%3Cpath d='M50 20 L76 35 L76 65 L50 80 L24 65 L24 35 Z' /%3E%3Cpath d='M50 20 L50 0 M76 35 L95 25 M76 65 L95 75 M50 80 L50 100 M24 65 L5 75 M24 35 L5 25' /%3E%3Ccircle cx='50' cy='50' r='12' stroke='%2306b6d4' stroke-width='1' stroke-opacity='0.1'/%3E%3C/g%3E%3C/svg%3E");
 }
 
-/* LTR support */
 html[lang="en"] { direction: ltr; }
 
 .wrap{
@@ -44,18 +47,17 @@ html[lang="en"] { direction: ltr; }
   flex-direction:column; 
   align-items:center; 
   justify-content:flex-start; 
-  padding: 4vh 5vw;
+  padding: 2vh 2vw; /* Reduced side padding to allow wider content */
   box-sizing:border-box; 
   overflow-y:auto;
 }
 
-/* Main Title - BIGGER */
 h1 {
   text-align:center; 
-  margin:2vh 0 5vh; 
-  font-size: 7vh; 
+  margin:2vh 0 4vh; 
+  font-size: 6vh; 
   font-weight: 900;
-  text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  text-shadow: 0 4px 15px rgba(0,0,0,0.5);
   line-height: 1.2;
 }
 
@@ -66,60 +68,65 @@ button:active{transform:scale(0.97);}
 
 .hidden{display:none !important;}
 
+/* WIDER CARD */
 .card{
   background:var(--card-dark); 
   border-radius:24px; 
   margin-top:2vh; 
   border:1px solid rgba(255,255,255,0.1); 
   width:100%; 
-  padding: 40px; 
+  padding: 30px; /* Reduced internal padding slightly */
   box-sizing:border-box; 
   font-size:3vh;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  backdrop-filter: blur(10px); /* Glassmorphism effect */
 }
 
+/* WIDER CONTROLS BAR */
 .controls{
   display:flex; flex-wrap:wrap; justify-content:space-between; 
-  gap: 15px; margin: 2vh 0; font-size:2.2vh; width: 100%; padding: 0 10px;
+  gap: 15px; margin: 2vh 0; font-size:2.2vh; width: 100%;
 }
-.row{display:flex; align-items:center; gap: 10px; background:rgba(0,0,0,0.2); padding:8px 15px; border-radius:12px;}
+.row{display:flex; align-items:center; gap: 10px; background:rgba(0,0,0,0.3); padding:10px 20px; border-radius:12px; border: 1px solid rgba(255,255,255,0.05);}
 
-/* INPUT FIELD - BIGGER & CENTERED */
+/* MASSIVE INPUT FIELD UPGRADE */
 input[type="text"]{
-  padding:25px; 
-  font-size: 5vh; 
-  font-weight: bold;
+  display: block; /* Ensure it takes full width */
+  padding: 20px; 
+  height: 100px; /* Fixed massive height */
+  font-size: 6vh; /* Huge text */
+  font-weight: 900;
   letter-spacing: 2px;
   border-radius:16px; 
-  border:3px solid var(--accent); 
+  border:4px solid var(--accent); /* Thicker border */
   width:100%; 
   box-sizing:border-box; 
   text-align:center;
-  background: rgba(255,255,255,0.05);
+  background: rgba(0,0,0,0.2);
   color: inherit;
   margin-bottom: 25px;
-  box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
+  box-shadow: inset 0 4px 20px rgba(0,0,0,0.3);
 }
-input[type="text"]:focus{ outline:none; background: rgba(255,255,255,0.1); border-color: var(--ok); }
+input[type="text"]:focus{ outline:none; background: rgba(0,0,0,0.4); border-color: var(--ok); box-shadow: 0 0 20px rgba(16,185,129,0.3); }
 
 select{padding:8px 15px; font-size:2.2vh; border-radius:8px; border:0; cursor:pointer; background:var(--bg-light); color:#333; font-weight:bold;}
-
 #langSelect { padding: 10px 20px; font-size: 2vh; border: 2px solid var(--accent); }
 
 .progress{height:20px; background:rgba(255,255,255,0.1); border-radius:10px; overflow:hidden; width: 100%;}
 .bar{height:100%; background:linear-gradient(90deg,#06b6d4,#10b981); width:0%; transition: width 1s linear;}
 .rank{padding:5px 15px; border-radius:20px; font-size:2.2vh; background:var(--accent); color:#fff; display:inline-block;}
 
-#menu{text-align:center; width:100%; max-width: 700px;}
+#menu{text-align:center; width:100%; max-width: 800px;}
 #menu button{width:100%; margin:2vh 0; padding: 30px; font-size: 3.5vh;}
 
-#game { width: 100%; max-width: 900px; display: flex; flex-direction: column; align-items: center; }
+/* CONTAINER WIDTH INCREASED */
+#game { width: 100%; max-width: 1200px; display: flex; flex-direction: column; align-items: center; }
 
-body.light .card{background:#fff; border:2px solid #e2e8f0; box-shadow: 0 10px 30px rgba(0,0,0,0.05);}
+body.light .card{background:rgba(255,255,255,0.9); border:2px solid #e2e8f0; box-shadow: 0 10px 30px rgba(0,0,0,0.05);}
 body.light button{border: 1px solid #ddd;} 
 body.light .primary{border:none; color: #fff;}
-body.light .row{background:rgba(0,0,0,0.05);}
-body.light input[type="text"]{background: #f8fafc; border: 3px solid #cbd5e1; color: #333;}
+body.light .row{background:rgba(255,255,255,0.6); border: 1px solid rgba(0,0,0,0.05);}
+body.light input[type="text"]{background: #f1f5f9; border: 4px solid #cbd5e1; color: #333;}
 
 #loseScreen{position:fixed; top:0; left:0; width:100vw; height:100vh; background:linear-gradient(135deg,#7f1d1d,#3b0b0b); display:flex; align-items:center; justify-content:center; flex-direction:column; font-size:4vh; color:#fff; z-index:999; text-align:center; opacity:0; pointer-events:none; transition:opacity .25s;}
 #loseScreen.show{opacity:1; pointer-events:auto;}
@@ -130,8 +137,7 @@ body.light input[type="text"]{background: #f8fafc; border: 3px solid #cbd5e1; co
 .settings-row { display: flex; justify-content: center; gap: 30px; margin-top: 4vh; align-items: center;}
 .header-row { display:flex; justify-content:space-between; align-items:center; font-size:2.5vh; margin-bottom: 20px; opacity: 0.8;}
 
-/* Dynamic XP text */
-.xp-popup { position: absolute; color: var(--ok); font-weight: bold; font-size: 3vh; animation: floatUp 1s ease-out forwards; pointer-events: none; }
+.xp-popup { position: absolute; color: var(--ok); font-weight: bold; font-size: 3vh; animation: floatUp 1s ease-out forwards; pointer-events: none; z-index: 200; }
 @keyframes floatUp { 0% { opacity:1; transform:translateY(0); } 100% { opacity:0; transform:translateY(-50px); } }
 </style>
 </head>
@@ -185,7 +191,7 @@ body.light input[type="text"]{background: #f8fafc; border: 3px solid #cbd5e1; co
     <div id="quiz" class="card hidden">
       <div class="header-row">
         <div id="quizHeader">🧪 اكتب الرمز</div>
-        <div><span id="quizTimerLbl">الوقت</span>: <span id="timer" style="font-family:monospace; font-weight:bold; color:var(--bad);">--</span></div>
+        <div><span id="quizTimerLbl">الوقت</span>: <span id="timer" style="font-family:monospace; font-weight:bold; color:var(--bad); font-size: 3vh;">--</span></div>
       </div>
       
       <div id="quizInfo" style="text-align:center; font-size:6vh; margin: 3vh 0;">
@@ -206,7 +212,7 @@ body.light input[type="text"]{background: #f8fafc; border: 3px solid #cbd5e1; co
     <div id="valency" class="card hidden">
       <div class="header-row">
         <div id="valHeader">⚖️ أدخل الشحنة</div>
-        <div><span id="valTimerLbl">الوقت</span>: <span id="valTimer" style="font-family:monospace; font-weight:bold; color:var(--bad);">--</span></div>
+        <div><span id="valTimerLbl">الوقت</span>: <span id="valTimer" style="font-family:monospace; font-weight:bold; color:var(--bad); font-size: 3vh;">--</span></div>
       </div>
 
       <div id="valInfo" style="text-align:center; font-size:6vh; margin: 3vh 0;">
@@ -238,54 +244,129 @@ body.light input[type="text"]{background: #f8fafc; border: 3px solid #cbd5e1; co
 <div id="celebration"><span id="celText">🎉 تهانينا!</span></div>
 
 <script>
-// --- Data ---
-// Expanded dataset with all requested elements for "Easy" and "Hard" logic
-const elements=[
-// Originals
-{symbol:'H',name:'الهيدروجين',en:'Hydrogen',val:['+1']},
-{symbol:'He',name:'الهيليوم',en:'Helium',val:['0']},
-{symbol:'Li',name:'الليثيوم',en:'Lithium',val:['+1']},
-{symbol:'Be',name:'البيريليوم',en:'Beryllium',val:['+2']},
-{symbol:'B',name:'البورون',en:'Boron',val:['+3']},
-{symbol:'C',name:'الكربون',en:'Carbon',val:['+4','-4']},
-{symbol:'N',name:'النيتروجين',en:'Nitrogen',val:['+5','-3']},
-{symbol:'O',name:'الأكسجين',en:'Oxygen',val:['-2']},
-{symbol:'F',name:'الفلور',en:'Fluorine',val:['-1']},
-{symbol:'Ne',name:'النيون',en:'Neon',val:['0']},
-{symbol:'Na',name:'الصوديوم',en:'Sodium',val:['+1']},
-{symbol:'Mg',name:'المغنيسيوم',en:'Magnesium',val:['+2']},
-{symbol:'Al',name:'الألمنيوم',en:'Aluminium',val:['+3']},
-{symbol:'Si',name:'السيليكون',en:'Silicon',val:['+4','-4']},
-{symbol:'P',name:'الفسفور',en:'Phosphorus',val:['+5','-3']},
-{symbol:'S',name:'الكبريت',en:'Sulfur',val:['-2','+6']},
-{symbol:'Cl',name:'الكلور',en:'Chlorine',val:['-1','+1','+5','+7']},
-{symbol:'Ar',name:'الأرجون',en:'Argon',val:['0']},
-{symbol:'K',name:'البوتاسيوم',en:'Potassium',val:['+1']},
-{symbol:'Ca',name:'الكالسيوم',en:'Calcium',val:['+2']},
-// New Additions for "Easy" Set
-{symbol:'Rb',name:'الروبيديوم',en:'Rubidium',val:['+1']},
-{symbol:'Cs',name:'السيزيوم',en:'Cesium',val:['+1']},
-{symbol:'Sr',name:'السترونشيوم',en:'Strontium',val:['+2']},
-{symbol:'Ba',name:'الباريوم',en:'Barium',val:['+2']},
-{symbol:'Cr',name:'الكروم',en:'Chromium',val:['+2','+3','+6']},
-{symbol:'Mn',name:'المنغنيز',en:'Manganese',val:['+2','+4','+7']},
-{symbol:'Fe',name:'الحديد',en:'Iron',val:['+2','+3']},
-{symbol:'Co',name:'الكوبالت',en:'Cobalt',val:['+2','+3']},
-{symbol:'Cu',name:'النحاس',en:'Copper',val:['+1','+2']},
-{symbol:'Ag',name:'الفظة',en:'Silver',val:['+1']},
-{symbol:'Au',name:'الذهب',en:'Gold',val:['+1','+3']},
-{symbol:'Zn',name:'الزنك',en:'Zinc',val:['+2']},
-{symbol:'Hg',name:'الزئبق',en:'Mercury',val:['+1','+2']},
-{symbol:'Sn',name:'القصدير',en:'Tin',val:['+2','+4']},
-{symbol:'Pb',name:'الرصاص',en:'Lead',val:['+2','+4']},
-{symbol:'Br',name:'البروم',en:'Bromine',val:['-1']},
-{symbol:'I',name:'اليود',en:'Iodine',val:['-1']},
-{symbol:'Kr',name:'الكريبتون',en:'Krypton',val:['0']},
-{symbol:'Xe',name:'الزينون',en:'Xenon',val:['0']},
-{symbol:'Rn',name:'الرادون',en:'Radon',val:['0']}
+// --- Data: Full 118 Elements ---
+const elements = [
+  {symbol:'H',name:'الهيدروجين',en:'Hydrogen',val:['+1']},
+  {symbol:'He',name:'الهيليوم',en:'Helium',val:['0']},
+  {symbol:'Li',name:'الليثيوم',en:'Lithium',val:['+1']},
+  {symbol:'Be',name:'البيريليوم',en:'Beryllium',val:['+2']},
+  {symbol:'B',name:'البورون',en:'Boron',val:['+3']},
+  {symbol:'C',name:'الكربون',en:'Carbon',val:['+4','-4']},
+  {symbol:'N',name:'النيتروجين',en:'Nitrogen',val:['+5','-3']},
+  {symbol:'O',name:'الأكسجين',en:'Oxygen',val:['-2']},
+  {symbol:'F',name:'الفلور',en:'Fluorine',val:['-1']},
+  {symbol:'Ne',name:'النيون',en:'Neon',val:['0']},
+  {symbol:'Na',name:'الصوديوم',en:'Sodium',val:['+1']},
+  {symbol:'Mg',name:'المغنيسيوم',en:'Magnesium',val:['+2']},
+  {symbol:'Al',name:'الألمنيوم',en:'Aluminium',val:['+3']},
+  {symbol:'Si',name:'السيليكون',en:'Silicon',val:['+4','-4']},
+  {symbol:'P',name:'الفسفور',en:'Phosphorus',val:['+5','-3']},
+  {symbol:'S',name:'الكبريت',en:'Sulfur',val:['-2','+6']},
+  {symbol:'Cl',name:'الكلور',en:'Chlorine',val:['-1','+1','+5','+7']},
+  {symbol:'Ar',name:'الأرجون',en:'Argon',val:['0']},
+  {symbol:'K',name:'البوتاسيوم',en:'Potassium',val:['+1']},
+  {symbol:'Ca',name:'الكالسيوم',en:'Calcium',val:['+2']},
+  {symbol:'Sc',name:'السكانديوم',en:'Scandium',val:['+3']},
+  {symbol:'Ti',name:'التيتانيوم',en:'Titanium',val:['+4']},
+  {symbol:'V',name:'الفاناديوم',en:'Vanadium',val:['+5','+4']},
+  {symbol:'Cr',name:'الكروم',en:'Chromium',val:['+2','+3','+6']},
+  {symbol:'Mn',name:'المنغنيز',en:'Manganese',val:['+2','+4','+7']},
+  {symbol:'Fe',name:'الحديد',en:'Iron',val:['+2','+3']},
+  {symbol:'Co',name:'الكوبالت',en:'Cobalt',val:['+2','+3']},
+  {symbol:'Ni',name:'النيكل',en:'Nickel',val:['+2']},
+  {symbol:'Cu',name:'النحاس',en:'Copper',val:['+1','+2']},
+  {symbol:'Zn',name:'الزنك',en:'Zinc',val:['+2']},
+  {symbol:'Ga',name:'الغاليوم',en:'Gallium',val:['+3']},
+  {symbol:'Ge',name:'الجرمانيوم',en:'Germanium',val:['+4']},
+  {symbol:'As',name:'الزرنيخ',en:'Arsenic',val:['+5','-3']},
+  {symbol:'Se',name:'السيلينيوم',en:'Selenium',val:['-2','+4','+6']},
+  {symbol:'Br',name:'البروم',en:'Bromine',val:['-1']},
+  {symbol:'Kr',name:'الكريبتون',en:'Krypton',val:['0']},
+  {symbol:'Rb',name:'الروبيديوم',en:'Rubidium',val:['+1']},
+  {symbol:'Sr',name:'السترونشيوم',en:'Strontium',val:['+2']},
+  {symbol:'Y',name:'الإتريوم',en:'Yttrium',val:['+3']},
+  {symbol:'Zr',name:'الزركونيوم',en:'Zirconium',val:['+4']},
+  {symbol:'Nb',name:'النيوبيوم',en:'Niobium',val:['+5']},
+  {symbol:'Mo',name:'الموليبدينوم',en:'Molybdenum',val:['+6']},
+  {symbol:'Tc',name:'التكنيشيوم',en:'Technetium',val:['+7']},
+  {symbol:'Ru',name:'الروثينيوم',en:'Ruthenium',val:['+3','+4']},
+  {symbol:'Rh',name:'الروديوم',en:'Rhodium',val:['+3']},
+  {symbol:'Pd',name:'البلاديوم',en:'Palladium',val:['+2','+4']},
+  {symbol:'Ag',name:'الفظة',en:'Silver',val:['+1']},
+  {symbol:'Cd',name:'الكادميوم',en:'Cadmium',val:['+2']},
+  {symbol:'In',name:'الإنديوم',en:'Indium',val:['+3']},
+  {symbol:'Sn',name:'القصدير',en:'Tin',val:['+2','+4']},
+  {symbol:'Sb',name:'الأنتيمون',en:'Antimony',val:['+3','+5']},
+  {symbol:'Te',name:'التيلوريوم',en:'Tellurium',val:['-2','+4']},
+  {symbol:'I',name:'اليود',en:'Iodine',val:['-1']},
+  {symbol:'Xe',name:'الزينون',en:'Xenon',val:['0']},
+  {symbol:'Cs',name:'السيزيوم',en:'Cesium',val:['+1']},
+  {symbol:'Ba',name:'الباريوم',en:'Barium',val:['+2']},
+  {symbol:'La',name:'اللانثانوم',en:'Lanthanum',val:['+3']},
+  {symbol:'Ce',name:'السيريوم',en:'Cerium',val:['+3','+4']},
+  {symbol:'Pr',name:'براسيوديميوم',en:'Praseodymium',val:['+3']},
+  {symbol:'Nd',name:'نيوديميوم',en:'Neodymium',val:['+3']},
+  {symbol:'Pm',name:'بروميثيوم',en:'Promethium',val:['+3']},
+  {symbol:'Sm',name:'ساماريوم',en:'Samarium',val:['+3']},
+  {symbol:'Eu',name:'يوروبيوم',en:'Europium',val:['+3','+2']},
+  {symbol:'Gd',name:'غادولينيوم',en:'Gadolinium',val:['+3']},
+  {symbol:'Tb',name:'تيربيوم',en:'Terbium',val:['+3']},
+  {symbol:'Dy',name:'ديسبروسيوم',en:'Dysprosium',val:['+3']},
+  {symbol:'Ho',name:'هولميوم',en:'Holmium',val:['+3']},
+  {symbol:'Er',name:'إربيوم',en:'Erbium',val:['+3']},
+  {symbol:'Tm',name:'ثوليوم',en:'Thulium',val:['+3']},
+  {symbol:'Yb',name:'إيتربيوم',en:'Ytterbium',val:['+3']},
+  {symbol:'Lu',name:'لوتيشيوم',en:'Lutetium',val:['+3']},
+  {symbol:'Hf',name:'هافنيوم',en:'Hafnium',val:['+4']},
+  {symbol:'Ta',name:'تانتالوم',en:'Tantalum',val:['+5']},
+  {symbol:'W',name:'تنجستن',en:'Tungsten',val:['+6']},
+  {symbol:'Re',name:'رينيوم',en:'Rhenium',val:['+7']},
+  {symbol:'Os',name:'أوزميوم',en:'Osmium',val:['+4']},
+  {symbol:'Ir',name:'إيريديوم',en:'Iridium',val:['+4']},
+  {symbol:'Pt',name:'البلاتين',en:'Platinum',val:['+2','+4']},
+  {symbol:'Au',name:'الذهب',en:'Gold',val:['+1','+3']},
+  {symbol:'Hg',name:'الزئبق',en:'Mercury',val:['+1','+2']},
+  {symbol:'Tl',name:'الثاليوم',en:'Thallium',val:['+1','+3']},
+  {symbol:'Pb',name:'الرصاص',en:'Lead',val:['+2','+4']},
+  {symbol:'Bi',name:'البزموت',en:'Bismuth',val:['+3']},
+  {symbol:'Po',name:'البولونيوم',en:'Polonium',val:['+2','+4']},
+  {symbol:'At',name:'الأستاتين',en:'Astatine',val:['-1']},
+  {symbol:'Rn',name:'الرادون',en:'Radon',val:['0']},
+  {symbol:'Fr',name:'الفرنسيوم',en:'Francium',val:['+1']},
+  {symbol:'Ra',name:'الراديوم',en:'Radium',val:['+2']},
+  {symbol:'Ac',name:'الأكتينيوم',en:'Actinium',val:['+3']},
+  {symbol:'Th',name:'الثوريوم',en:'Thorium',val:['+4']},
+  {symbol:'Pa',name:'البروتكتينيوم',en:'Protactinium',val:['+5']},
+  {symbol:'U',name:'اليورانيوم',en:'Uranium',val:['+6','+4']},
+  {symbol:'Np',name:'النبتونيوم',en:'Neptunium',val:['+5']},
+  {symbol:'Pu',name:'البلوتونيوم',en:'Plutonium',val:['+4']},
+  {symbol:'Am',name:'الأمريسيوم',en:'Americium',val:['+3']},
+  {symbol:'Cm',name:'الكوريوم',en:'Curium',val:['+3']},
+  {symbol:'Bk',name:'البركيليوم',en:'Berkelium',val:['+3']},
+  {symbol:'Cf',name:'الكاليفورنيوم',en:'Californium',val:['+3']},
+  {symbol:'Es',name:'الأينشتاينيوم',en:'Einsteinium',val:['+3']},
+  {symbol:'Fm',name:'الفرميوم',en:'Fermium',val:['+3']},
+  {symbol:'Md',name:'المندليفيوم',en:'Mendelevium',val:['+3']},
+  {symbol:'No',name:'النوبليوم',en:'Nobelium',val:['+2']},
+  {symbol:'Lr',name:'ال لورنسيوم',en:'Lawrencium',val:['+3']},
+  {symbol:'Rf',name:'الرذرفورديوم',en:'Rutherfordium',val:['+4']},
+  {symbol:'Db',name:'الدوبنيوم',en:'Dubnium',val:['+5']},
+  {symbol:'Sg',name:'السي بورجيوم',en:'Seaborgium',val:['+6']},
+  {symbol:'Bh',name:'البوريوم',en:'Bohrium',val:['+7']},
+  {symbol:'Hs',name:'الهاسيوم',en:'Hassium',val:['+8']},
+  {symbol:'Mt',name:'المايتنريوم',en:'Meitnerium',val:['+9']},
+  {symbol:'Ds',name:'الدارمشتاتيوم',en:'Darmstadtium',val:['+10']},
+  {symbol:'Rg',name:'الرونتجينيوم',en:'Roentgenium',val:['+11']},
+  {symbol:'Cn',name:'الكوبرنيسيوم',en:'Copernicium',val:['+12','+2']},
+  {symbol:'Nh',name:'النيهونيوم',en:'Nihonium',val:['+3']},
+  {symbol:'Fl',name:'الفليروفيوم',en:'Flerovium',val:['+4','+2']},
+  {symbol:'Mc',name:'الموسكوفيوم',en:'Moscovium',val:['+3','+1']},
+  {symbol:'Lv',name:'الليفرموريوم',en:'Livermorium',val:['+2']},
+  {symbol:'Ts',name:'التينيسين',en:'Tennessine',val:['-1']},
+  {symbol:'Og',name:'الأوغانيسون',en:'Oganesson',val:['0']}
 ];
 
-// The Specific List defined for Easy Mode
+// Easy Mode List
 const easySymbols = ['H','Li','Be','Na','K','Rb','Cs','Mg','Ca','Sr','Ba','Cr','Mn','Fe','Co','Cu','Ag','Au','Zn','Hg','B','Al','C','Si','Sn','Pb','N','P','O','S','F','Cl','Br','I','He','Ne','Ar','Kr','Xe','Rn'];
 
 // --- Translation Dictionary ---
@@ -301,7 +382,7 @@ const dictionary = {
     time: "الوقت",
     xp: "نقاط الخبرة",
     rank: "الرتبة",
-    easy: "سهل", hard: "صعب", // Medium removed
+    easy: "سهل", hard: "صعب",
     qHeader: "ما هو الرمز الكيميائي؟",
     phSym: "اكتب الرمز هنا",
     check: "تأكيد الإجابة",
@@ -347,7 +428,7 @@ const tiers=[
 
 // --- Globals & DOM ---
 let currentLang = 'ar';
-const LS_KEY='chem_game_v6_ultra';
+const LS_KEY='chem_game_v8_final';
 let activeTimer = null; 
 
 const menu=document.getElementById('menu'), game=document.getElementById('game');
@@ -369,25 +450,17 @@ function clearAllTimers(){if(activeTimer){clearInterval(activeTimer); activeTime
 function normalizeValInput(s){if(!s) return null;s=s.toString().trim().replace(/\s+/g,'');if(/^[+-]?\d+$/.test(s)){if(s==='0'||s==='+0'||s==='-0')return'0'; if(/^[+-]/.test(s))return (s[0]==='+')?('+'+parseInt(s,10)):'-'+Math.abs(parseInt(s,10)); return '+'+parseInt(s,10);} return null;}
 function valAcceptedFor(elem,answerNormalized){if(!elem||!elem.val)return false; return elem.val.some(v=>{if(v==='0')return answerNormalized==='0'; return v===answerNormalized;});}
 
-// Calculate XP based on Time and Difficulty
 function calculateXP(){
   let base = 10;
   const timeSetting = parseInt(document.getElementById('timeLimit').value);
   const diffSetting = document.getElementById('difficulty').value;
-  
   let multiplier = 1;
-  
-  // Time Multipliers
-  if(timeSetting === 8) multiplier *= 1.5; // Less time = More XP
-  if(timeSetting === 20) multiplier *= 0.5; // More time = Less XP
-  
-  // Difficulty Multipliers
-  if(diffSetting === 'hard') multiplier *= 1.5; // Hard = More XP
-  
+  if(timeSetting === 8) multiplier *= 1.5; 
+  if(timeSetting === 20) multiplier *= 0.5; 
+  if(diffSetting === 'hard') multiplier *= 1.5; 
   return Math.ceil(base * multiplier);
 }
 
-// Show floating XP animation
 function showFloatingXP(amount, x, y){
   const el = document.createElement('div');
   el.className = 'xp-popup';
@@ -398,19 +471,16 @@ function showFloatingXP(amount, x, y){
   setTimeout(()=>el.remove(), 1000);
 }
 
-// Filter elements based on difficulty
 function getGameElements(){
   const diff = document.getElementById('difficulty').value;
   if(diff === 'easy'){
-    // Return only elements in the easySymbols list
-    return elements.filter(e => easySymbols.includes(e.symbol));
+    return elements.filter(e => easySymbols.map(s=>s.toUpperCase()).includes(e.symbol.toUpperCase()));
   } else {
-    // Hard mode = All elements
     return elements.slice();
   }
 }
 
-// --- Localization Logic ---
+// --- Localization & Save ---
 function applyLanguage(){
   const t = dictionary[currentLang];
   document.documentElement.lang = currentLang;
@@ -421,7 +491,6 @@ function applyLanguage(){
   menuVal.textContent = t.btnVal;
   clearSaveBtn.textContent = t.reset;
   document.getElementById('lblMode').textContent = t.mode;
-  
   document.getElementById('txtBack').textContent = t.back;
   document.getElementById('lblDiff').textContent = t.diff;
   document.getElementById('lblTime').textContent = t.time;
@@ -429,35 +498,29 @@ function applyLanguage(){
   document.getElementById('lblRank').textContent = t.rank;
   document.getElementById('optEasy').textContent = t.easy;
   document.getElementById('optHard').textContent = t.hard;
-  
   document.getElementById('quizHeader').textContent = t.qHeader;
   answerInput.placeholder = t.phSym;
   document.getElementById('btnCheck1').textContent = t.check;
   document.getElementById('streakLbl1').textContent = t.streak;
   document.getElementById('quizTimerLbl').textContent = t.time;
-
   document.getElementById('valHeader').textContent = t.vHeader;
   document.getElementById('valNote').textContent = t.vNote;
   document.getElementById('btnCheck2').textContent = t.check;
   document.getElementById('streakLbl2').textContent = t.streak;
   document.getElementById('valTimerLbl').textContent = t.time;
-
   document.getElementById('txtWrong').textContent = t.wrong;
   document.getElementById('txtCorrectIs').textContent = t.correctIs;
 
   updateStats(false);
-  
   if(current){
     if(currentMode==='quiz') qName.textContent = currentLang==='ar' ? current.name : current.en;
     if(currentMode==='valency') valPrompt.textContent = currentLang==='ar' ? current.name : current.en;
   }
 }
 
-// --- Save / Load ---
 function saveState(){
   const st={
-    xp, streak, 
-    lang: currentLang,
+    xp, streak, lang: currentLang,
     settings:{
       difficulty:document.getElementById('difficulty').value, 
       timeLimit:document.getElementById('timeLimit').value
@@ -482,7 +545,7 @@ function loadState(){
   }catch(e){console.warn('load failed',e);}
 }
 
-// --- Core Game Flow ---
+// --- Logic ---
 function updateStats(checkCelebration=true){
   streakEl.textContent=streak;
   valStreakEl.textContent=streak;
@@ -532,7 +595,6 @@ function hideAllModes(){
   valDiv.classList.add('hidden');
 }
 
-// --- Quiz Mode ---
 function startQuiz(){
   clearAllTimers();
   quizList = getGameElements();
@@ -544,16 +606,13 @@ function startQuiz(){
 function nextQuiz(){
   clearAllTimers();
   if(quizIndex>=quizList.length){ quizList = getGameElements(); shuffle(quizList); quizIndex=0; }
-  
   const el=quizList[quizIndex]; 
   current=el; 
   qName.textContent = currentLang==='ar' ? el.name : el.en;
-  
   answerInput.value=''; 
   timeLeft=parseInt(document.getElementById('timeLimit').value); 
   timerEl.textContent=timeLeft; 
   timebar.style.width='100%'; 
-  timebar.style.transition = 'width 1s linear';
   startQuizTimer();
   answerInput.focus();
 }
@@ -565,7 +624,6 @@ function startQuizTimer(){
     timerEl.textContent=timeLeft; 
     const totalTime = parseInt(document.getElementById('timeLimit').value);
     timebar.style.width=((timeLeft/totalTime)*100)+'%';
-    
     if(timeLeft<=0){
       clearAllTimers(); 
       showLose(current.symbol);
@@ -582,11 +640,8 @@ function submitQuizAnswer(){
     streak++; 
     const pts = calculateXP();
     xp+=pts; 
-    
-    // Animation logic
     const rect = answerInput.getBoundingClientRect();
     showFloatingXP(pts, rect.left + rect.width/2, rect.top);
-
     quizIndex++; 
     updateStats(); 
     saveState(); 
@@ -600,7 +655,6 @@ function submitQuizAnswer(){
   } 
 }
 
-// --- Valency Mode ---
 function startValency(){
   clearAllTimers();
   valList=getGameElements();
@@ -612,11 +666,9 @@ function startValency(){
 function nextVal(){
   clearAllTimers();
   if(valIndex>=valList.length){ valList=getGameElements(); shuffle(valList); valIndex=0; }
-  
   const el=valList[valIndex]; 
   current=el; 
   valPrompt.textContent = currentLang==='ar' ? el.name : el.en;
-  
   valAnswer.value=''; 
   timeLeft=parseInt(document.getElementById('timeLimit').value); 
   valTimerEl.textContent=timeLeft; 
@@ -632,7 +684,6 @@ function startValTimer(){
     valTimerEl.textContent=timeLeft; 
     const totalTime = parseInt(document.getElementById('timeLimit').value);
     valTimebar.style.width=((timeLeft/totalTime)*100)+'%';
-    
     if(timeLeft<=0){
       clearAllTimers(); 
       showLose(current.val.join(' / '));
@@ -647,11 +698,8 @@ function submitValAnswer(){
     streak++; 
     const pts = calculateXP();
     xp+=pts; 
-    
-    // Animation logic
     const rect = valAnswer.getBoundingClientRect();
     showFloatingXP(pts, rect.left + rect.width/2, rect.top);
-
     valIndex++; 
     updateStats(); 
     saveState(); 
@@ -665,7 +713,6 @@ function submitValAnswer(){
   } 
 }
 
-// --- Lose Screen ---
 function showLose(correctStr){
   clearAllTimers();
   loseAnswerEl.textContent=correctStr; 
@@ -677,7 +724,7 @@ function showLose(correctStr){
   },2500);
 }
 
-// --- Events ---
+// Events
 menuQuiz.onclick=()=>{
   clearAllTimers();
   showGame(); 
@@ -686,7 +733,6 @@ menuQuiz.onclick=()=>{
   currentMode='quiz'; 
   startQuiz();
 };
-
 menuVal.onclick=()=>{
   clearAllTimers();
   showGame(); 
@@ -695,12 +741,10 @@ menuVal.onclick=()=>{
   currentMode='valency'; 
   startValency();
 };
-
 backMenu.onclick=()=>{
   clearAllTimers();
   showMenu();
 };
-
 clearSaveBtn.onclick=()=>{localStorage.removeItem(LS_KEY); location.reload();}
 toggleMode.onchange=()=>{document.body.classList.toggle('light',toggleMode.checked);}
 langSelect.onchange=()=>{
@@ -708,14 +752,11 @@ langSelect.onchange=()=>{
   applyLanguage();
   saveState();
 };
-
 submitBtn.onclick=submitQuizAnswer; 
 answerInput.addEventListener('keydown',e=>{if(e.key==='Enter') submitQuizAnswer();});
-
 valSubmit.onclick=submitValAnswer; 
 valAnswer.addEventListener('keydown',e=>{if(e.key==='Enter') submitValAnswer();});
 
-// --- Initialization ---
 loadState();
 applyLanguage();
 showMenu();
