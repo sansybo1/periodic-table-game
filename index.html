@@ -3,21 +3,40 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>لعبة العناصر</title>
+<title>لعبة العناصر والتكافؤات</title>
 <style>
 :root{
   --bg-dark:#0f1720; --bg-light:#f5f5f5;
-  --card-dark:#111827; --card-light:#fff;
-  --text-dark:#fff; --text-light:#042;
-  --muted-dark:#9ca3af; --muted-light:#555;
+  --card-dark:#1e293b; --card-light:#fff;
+  --text-dark:#e2e8f0; --text-light:#1e293b;
   --accent:#06b6d4; --ok:#10b981; --bad:#ef4444;
 }
-html,body{margin:0; padding:0; width:100%; height:100%; font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial; background:var(--bg-dark); color:var(--text-dark); transition: background 0.3s, color 0.3s;}
-body.light{background:var(--bg-light); color:var(--text-light);}
-/* LTR support for English */
+
+/* Background with abstract chemical hex pattern */
+body {
+  margin:0; padding:0; width:100%; height:100%; 
+  font-family:system-ui,-apple-system,'Segoe UI',Roboto,Arial; 
+  transition: background 0.3s, color 0.3s;
+  background-color: var(--bg-dark);
+  color: var(--text-dark);
+  /* Abstract Hex Pattern */
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(6, 182, 212, 0.15), transparent 25%), 
+    radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.15), transparent 25%),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.07'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+body.light {
+  background-color: var(--bg-light);
+  color: var(--text-light);
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(6, 182, 212, 0.1), transparent 25%), 
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* LTR support */
 html[lang="en"] { direction: ltr; }
 
-/* MAIN LAYOUT UPDATES */
 .wrap{
   width:100%; 
   min-height:100vh; 
@@ -30,111 +49,105 @@ html[lang="en"] { direction: ltr; }
   overflow-y:auto;
 }
 
-h1{text-align:center; margin:1vh 0 4vh; font-size:5vh;}
+/* Main Title - BIGGER */
+h1 {
+  text-align:center; 
+  margin:2vh 0 5vh; 
+  font-size: 7vh; 
+  font-weight: 900;
+  text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  line-height: 1.2;
+}
 
-button{cursor:pointer; border:0; border-radius:12px; padding:15px 30px; font-size:2.5vh; font-weight:bold; transition: transform 0.1s; margin: 5px;}
-button:active{transform:scale(0.98);}
-.primary{background:var(--accent); color:#042; box-shadow:0 4px 10px rgba(6,182,212,.3);}
+button{cursor:pointer; border:0; border-radius:16px; padding:20px 30px; font-size:2.8vh; font-weight:bold; transition: transform 0.1s, box-shadow 0.2s; margin: 8px;}
+button:active{transform:scale(0.97);}
+.primary{background:linear-gradient(135deg, var(--accent), #0891b2); color:#fff; box-shadow:0 4px 15px rgba(6,182,212,0.4);}
 .danger{background:var(--bad); color:#fff;}
 
 .hidden{display:none !important;}
 
 .card{
-  background:rgba(255,255,255,0.02); 
-  border-radius:16px; 
+  background:var(--card-dark); 
+  border-radius:24px; 
   margin-top:2vh; 
-  border:2px solid rgba(255,255,255,0.05); 
+  border:1px solid rgba(255,255,255,0.1); 
   width:100%; 
   padding: 40px; 
   box-sizing:border-box; 
   font-size:3vh;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
 }
 
 .controls{
-  display:flex; 
-  flex-wrap:wrap; 
-  justify-content:space-between; 
-  gap: 20px; 
-  margin: 3vh 0; 
-  font-size:2.2vh; 
-  width: 100%;
-  padding: 0 10px;
+  display:flex; flex-wrap:wrap; justify-content:space-between; 
+  gap: 15px; margin: 2vh 0; font-size:2.2vh; width: 100%; padding: 0 10px;
 }
-.row{display:flex; align-items:center; gap: 10px;}
+.row{display:flex; align-items:center; gap: 10px; background:rgba(0,0,0,0.2); padding:8px 15px; border-radius:12px;}
 
+/* INPUT FIELD - BIGGER & CENTERED */
 input[type="text"]{
-  padding:20px; 
-  font-size:3.5vh; 
-  border-radius:12px; 
-  border:2px solid var(--accent); 
+  padding:25px; 
+  font-size: 5vh; 
+  font-weight: bold;
+  letter-spacing: 2px;
+  border-radius:16px; 
+  border:3px solid var(--accent); 
   width:100%; 
   box-sizing:border-box; 
   text-align:center;
   background: rgba(255,255,255,0.05);
   color: inherit;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
 }
-input[type="text"]:focus{ outline:none; background: rgba(255,255,255,0.1); }
+input[type="text"]:focus{ outline:none; background: rgba(255,255,255,0.1); border-color: var(--ok); }
 
-/* General Select Styles */
-select{padding:8px 15px; font-size:2.2vh; border-radius:8px; border:0; cursor:pointer;}
+select{padding:8px 15px; font-size:2.2vh; border-radius:8px; border:0; cursor:pointer; background:var(--bg-light); color:#333; font-weight:bold;}
 
-/* Language Dropdown Specific */
-#langSelect {
-  padding: 12px 20px;
-  font-size: 2.2vh;
-  border-radius: 8px;
-  background: var(--card-light);
-  color: #333;
-  border: 2px solid var(--accent);
-  font-weight: bold;
-}
-body:not(.light) #langSelect {
-  background: var(--card-dark);
-  color: #fff;
-  border: 2px solid var(--muted-dark);
-}
+#langSelect { padding: 10px 20px; font-size: 2vh; border: 2px solid var(--accent); }
 
 .progress{height:20px; background:rgba(255,255,255,0.1); border-radius:10px; overflow:hidden; width: 100%;}
 .bar{height:100%; background:linear-gradient(90deg,#06b6d4,#10b981); width:0%; transition: width 1s linear;}
-.rank{padding:5px 15px; border-radius:20px; font-size:2.2vh; background:rgba(255,255,255,0.1); display:inline-block;}
+.rank{padding:5px 15px; border-radius:20px; font-size:2.2vh; background:var(--accent); color:#fff; display:inline-block;}
 
-#menu{text-align:center; width:100%; max-width: 600px;}
-#menu button{width:100%; margin:1.5vh 0; padding: 25px;}
+#menu{text-align:center; width:100%; max-width: 700px;}
+#menu button{width:100%; margin:2vh 0; padding: 30px; font-size: 3.5vh;}
 
 #game { width: 100%; max-width: 900px; display: flex; flex-direction: column; align-items: center; }
 
-body.light .card{background:#fff; border:2px solid #e5e7eb; box-shadow: 0 10px 30px rgba(0,0,0,0.05);}
-body.light button{background:var(--card-light); color:var(--text-light); border: 1px solid #ddd;}
-body.light .primary{background:var(--accent); color:#fff; border:none;}
-body.light .danger{background:var(--bad); color:#fff; border:none;}
-body.light input[type="text"]{background: #fff; border: 2px solid #ccc; color: #333;}
+body.light .card{background:#fff; border:2px solid #e2e8f0; box-shadow: 0 10px 30px rgba(0,0,0,0.05);}
+body.light button{border: 1px solid #ddd;} 
+body.light .primary{border:none; color: #fff;}
+body.light .row{background:rgba(0,0,0,0.05);}
+body.light input[type="text"]{background: #f8fafc; border: 3px solid #cbd5e1; color: #333;}
 
-#loseScreen{position:fixed; top:0; left:0; width:100vw; height:100vh; background:linear-gradient(135deg,#3b0b0b,#7f1d1d); display:flex; align-items:center; justify-content:center; flex-direction:column; font-size:4vh; color:#fff; z-index:999; text-align:center; opacity:0; pointer-events:none; transition:opacity .25s;}
+#loseScreen{position:fixed; top:0; left:0; width:100vw; height:100vh; background:linear-gradient(135deg,#7f1d1d,#3b0b0b); display:flex; align-items:center; justify-content:center; flex-direction:column; font-size:4vh; color:#fff; z-index:999; text-align:center; opacity:0; pointer-events:none; transition:opacity .25s;}
 #loseScreen.show{opacity:1; pointer-events:auto;}
 
-#celebration{position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(255,255,255,0.95); display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:5vh; color:#10b981; z-index:1000; text-align:center; opacity:0; pointer-events:none; transition:opacity 0.3s; padding: 20px;}
+#celebration{position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(255,255,255,0.98); display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:5vh; color:#10b981; z-index:1000; text-align:center; opacity:0; pointer-events:none; transition:opacity 0.3s; padding: 20px;}
 #celebration.show{opacity:1; pointer-events:auto;}
 
 .settings-row { display: flex; justify-content: center; gap: 30px; margin-top: 4vh; align-items: center;}
-.header-row { display:flex; justify-content:space-between; align-items:center; font-size:2.2vh; margin-bottom: 20px; color: var(--muted-dark); }
-body.light .header-row { color: var(--muted-light); }
+.header-row { display:flex; justify-content:space-between; align-items:center; font-size:2.5vh; margin-bottom: 20px; opacity: 0.8;}
+
+/* Dynamic XP text */
+.xp-popup { position: absolute; color: var(--ok); font-weight: bold; font-size: 3vh; animation: floatUp 1s ease-out forwards; pointer-events: none; }
+@keyframes floatUp { 0% { opacity:1; transform:translateY(0); } 100% { opacity:0; transform:translateY(-50px); } }
 </style>
 </head>
 <body>
 <div class="wrap">
   <div id="menu">
-    <h1 id="titleText">⚛️ لعبة العناصر</h1>
+    <h1 id="titleText">⚛️ لعبة العناصر والتكافؤات</h1>
     <button id="menuQuiz" class="primary">🧪 تحدي رموز العناصر</button>
     <button id="menuVal" class="primary">⚖️ تحدي تكافؤات العناصر</button>
     
     <div style="margin-top:4vh">
-      <button id="clearSave" class="danger">🗑️ مسح الحفظ (Reset)</button>
+      <button id="clearSave" class="danger" style="font-size:2.2vh; padding: 15px;">🗑️ مسح الحفظ (Reset)</button>
     </div>
     
     <div class="settings-row">
-       <label style="cursor:pointer; display:flex; align-items:center; gap:10px;">
+       <label style="cursor:pointer; display:flex; align-items:center; gap:10px; font-size:2.2vh;">
          <input id="toggleMode" type="checkbox"> 
          <span id="lblMode">نهار/ليل</span>
        </label>
@@ -154,16 +167,15 @@ body.light .header-row { color: var(--muted-light); }
     <div class="controls">
       <div class="row"><span id="lblDiff">الصعوبة</span>:
         <select id="difficulty">
-          <option value="easy" id="optEasy">سهل</option>
-          <option value="medium" selected id="optMed">متوسط</option>
+          <option value="easy" selected id="optEasy">سهل</option>
           <option value="hard" id="optHard">صعب</option>
         </select>
       </div>
       <div class="row"><span id="lblTime">الوقت</span>:
         <select id="timeLimit">
-          <option value="8">8s</option>
+          <option value="8">8s (XP++)</option>
           <option value="12" selected>12s</option>
-          <option value="20">20s</option>
+          <option value="20">20s (XP--)</option>
         </select>
       </div>
       <div class="row"><span id="lblXP">خبرة</span>: <span id="xp" style="color:var(--accent); font-weight:bold;">0</span></div>
@@ -173,14 +185,14 @@ body.light .header-row { color: var(--muted-light); }
     <div id="quiz" class="card hidden">
       <div class="header-row">
         <div id="quizHeader">🧪 اكتب الرمز</div>
-        <div><span id="quizTimerLbl">الوقت</span>: <span id="timer" style="font-family:monospace; font-weight:bold;">--</span></div>
+        <div><span id="quizTimerLbl">الوقت</span>: <span id="timer" style="font-family:monospace; font-weight:bold; color:var(--bad);">--</span></div>
       </div>
       
       <div id="quizInfo" style="text-align:center; font-size:6vh; margin: 3vh 0;">
-        <div id="qName" style="font-weight:800; color:var(--accent); text-shadow: 0 0 20px rgba(6,182,212,0.2);">—</div>
+        <div id="qName" style="font-weight:900; color:var(--accent); text-shadow: 0 0 30px rgba(6,182,212,0.3);">—</div>
       </div>
       
-      <div style="width:100%">
+      <div style="width:100%; position:relative;">
         <input id="answer" placeholder="Symbol (e.g. H)" autocomplete="off" />
         <button id="submit" class="primary" style="width:100%">✔ <span id="btnCheck1">تحقق</span></button>
       </div>
@@ -194,15 +206,15 @@ body.light .header-row { color: var(--muted-light); }
     <div id="valency" class="card hidden">
       <div class="header-row">
         <div id="valHeader">⚖️ أدخل الشحنة</div>
-        <div><span id="valTimerLbl">الوقت</span>: <span id="valTimer" style="font-family:monospace; font-weight:bold;">--</span></div>
+        <div><span id="valTimerLbl">الوقت</span>: <span id="valTimer" style="font-family:monospace; font-weight:bold; color:var(--bad);">--</span></div>
       </div>
 
       <div id="valInfo" style="text-align:center; font-size:6vh; margin: 3vh 0;">
-        <div id="valPrompt" style="font-weight:800; color:var(--accent); text-shadow: 0 0 20px rgba(6,182,212,0.2);">—</div>
+        <div id="valPrompt" style="font-weight:900; color:var(--accent); text-shadow: 0 0 30px rgba(6,182,212,0.3);">—</div>
         <div class="small-muted" style="margin-top:1vh; font-size:2.2vh; opacity:0.6; font-weight:normal;" id="valNote">(بدون إشارة = موجب)</div>
       </div>
 
-      <div style="width:100%">
+      <div style="width:100%; position:relative;">
         <input id="valAnswer" placeholder="+1, -2, 0" autocomplete="off" />
         <button id="valSubmit" class="primary" style="width:100%">✔ <span id="btnCheck2">تحقق</span></button>
       </div>
@@ -227,7 +239,9 @@ body.light .header-row { color: var(--muted-light); }
 
 <script>
 // --- Data ---
+// Expanded dataset with all requested elements for "Easy" and "Hard" logic
 const elements=[
+// Originals
 {symbol:'H',name:'الهيدروجين',en:'Hydrogen',val:['+1']},
 {symbol:'He',name:'الهيليوم',en:'Helium',val:['0']},
 {symbol:'Li',name:'الليثيوم',en:'Lithium',val:['+1']},
@@ -247,13 +261,37 @@ const elements=[
 {symbol:'Cl',name:'الكلور',en:'Chlorine',val:['-1','+1','+5','+7']},
 {symbol:'Ar',name:'الأرجون',en:'Argon',val:['0']},
 {symbol:'K',name:'البوتاسيوم',en:'Potassium',val:['+1']},
-{symbol:'Ca',name:'الكالسيوم',en:'Calcium',val:['+2']}
+{symbol:'Ca',name:'الكالسيوم',en:'Calcium',val:['+2']},
+// New Additions for "Easy" Set
+{symbol:'Rb',name:'الروبيديوم',en:'Rubidium',val:['+1']},
+{symbol:'Cs',name:'السيزيوم',en:'Cesium',val:['+1']},
+{symbol:'Sr',name:'السترونشيوم',en:'Strontium',val:['+2']},
+{symbol:'Ba',name:'الباريوم',en:'Barium',val:['+2']},
+{symbol:'Cr',name:'الكروم',en:'Chromium',val:['+2','+3','+6']},
+{symbol:'Mn',name:'المنغنيز',en:'Manganese',val:['+2','+4','+7']},
+{symbol:'Fe',name:'الحديد',en:'Iron',val:['+2','+3']},
+{symbol:'Co',name:'الكوبالت',en:'Cobalt',val:['+2','+3']},
+{symbol:'Cu',name:'النحاس',en:'Copper',val:['+1','+2']},
+{symbol:'Ag',name:'الفظة',en:'Silver',val:['+1']},
+{symbol:'Au',name:'الذهب',en:'Gold',val:['+1','+3']},
+{symbol:'Zn',name:'الزنك',en:'Zinc',val:['+2']},
+{symbol:'Hg',name:'الزئبق',en:'Mercury',val:['+1','+2']},
+{symbol:'Sn',name:'القصدير',en:'Tin',val:['+2','+4']},
+{symbol:'Pb',name:'الرصاص',en:'Lead',val:['+2','+4']},
+{symbol:'Br',name:'البروم',en:'Bromine',val:['-1']},
+{symbol:'I',name:'اليود',en:'Iodine',val:['-1']},
+{symbol:'Kr',name:'الكريبتون',en:'Krypton',val:['0']},
+{symbol:'Xe',name:'الزينون',en:'Xenon',val:['0']},
+{symbol:'Rn',name:'الرادون',en:'Radon',val:['0']}
 ];
+
+// The Specific List defined for Easy Mode
+const easySymbols = ['H','Li','Be','Na','K','Rb','Cs','Mg','Ca','Sr','Ba','Cr','Mn','Fe','Co','Cu','Ag','Au','Zn','Hg','B','Al','C','Si','Sn','Pb','N','P','O','S','F','Cl','Br','I','He','Ne','Ar','Kr','Xe','Rn'];
 
 // --- Translation Dictionary ---
 const dictionary = {
   ar: {
-    title: "⚛️ لعبة العناصر",
+    title: "⚛️ لعبة العناصر والتكافؤات",
     btnQuiz: "🧪 تحدي رموز العناصر",
     btnVal: "⚖️ تحدي تكافؤات العناصر",
     reset: "🗑️ مسح الحفظ",
@@ -263,9 +301,9 @@ const dictionary = {
     time: "الوقت",
     xp: "نقاط الخبرة",
     rank: "الرتبة",
-    easy: "سهل", med: "متوسط", hard: "صعب",
+    easy: "سهل", hard: "صعب", // Medium removed
     qHeader: "ما هو الرمز الكيميائي؟",
-    phSym: "اكتب الرمز هنا (مثال: H)",
+    phSym: "اكتب الرمز هنا",
     check: "تأكيد الإجابة",
     streak: "🔥 تتابع",
     vHeader: "ما هو تكافؤ العنصر؟",
@@ -275,7 +313,7 @@ const dictionary = {
     cel: "🎉 تهانينا! لقد وصلت إلى رتبة:"
   },
   en: {
-    title: "⚛️ Elements Game",
+    title: "⚛️ Elements & Valencies",
     btnQuiz: "🧪 Symbol Challenge",
     btnVal: "⚖️ Valency Challenge",
     reset: "🗑️ Reset Save",
@@ -285,9 +323,9 @@ const dictionary = {
     time: "Time",
     xp: "XP",
     rank: "Rank",
-    easy: "Easy", med: "Med", hard: "Hard",
+    easy: "Easy", hard: "Hard",
     qHeader: "What is the Symbol?",
-    phSym: "Type symbol here (e.g. H)",
+    phSym: "Type symbol here",
     check: "Submit Answer",
     streak: "🔥 Streak",
     vHeader: "What is the Valency?",
@@ -299,18 +337,18 @@ const dictionary = {
 };
 
 const tiers=[
-  {xp:0,name:'متعلم مبتدئ', en:'Novice Learner'},
-  {xp:50,name:'متعلم متقدم', en:'Advanced Learner'},
-  {xp:150,name:'خبير العناصر', en:'Element Expert'},
-  {xp:300,name:'مايسترو الكيمياء', en:'Chemistry Maestro'},
-  {xp:600,name:'السيد الخارق', en:'Super Master'},
-  {xp:1500,name:'سيد العناصر المزيف', en:'Fake Master'}
+  {xp:0,name:'مبتدئ كيمياء', en:'Novice Learner'},
+  {xp:100,name:'طالب مجتهد', en:'Advanced Student'},
+  {xp:300,name:'خبير المعمل', en:'Lab Expert'},
+  {xp:600,name:'مايسترو الكيمياء', en:'Chemistry Maestro'},
+  {xp:1200,name:'عالم ذرة', en:'Atomic Scientist'},
+  {xp:2500,name:'مندلييف الأسطوري', en:'Legendary Mendeleev'}
 ];
 
 // --- Globals & DOM ---
 let currentLang = 'ar';
-const LS_KEY='periodic_game_v5_select';
-let activeTimer = null; // Track active timer
+const LS_KEY='chem_game_v6_ultra';
+let activeTimer = null; 
 
 const menu=document.getElementById('menu'), game=document.getElementById('game');
 const menuQuiz=document.getElementById('menuQuiz'), menuVal=document.getElementById('menuVal');
@@ -331,44 +369,79 @@ function clearAllTimers(){if(activeTimer){clearInterval(activeTimer); activeTime
 function normalizeValInput(s){if(!s) return null;s=s.toString().trim().replace(/\s+/g,'');if(/^[+-]?\d+$/.test(s)){if(s==='0'||s==='+0'||s==='-0')return'0'; if(/^[+-]/.test(s))return (s[0]==='+')?('+'+parseInt(s,10)):'-'+Math.abs(parseInt(s,10)); return '+'+parseInt(s,10);} return null;}
 function valAcceptedFor(elem,answerNormalized){if(!elem||!elem.val)return false; return elem.val.some(v=>{if(v==='0')return answerNormalized==='0'; return v===answerNormalized;});}
 
+// Calculate XP based on Time and Difficulty
+function calculateXP(){
+  let base = 10;
+  const timeSetting = parseInt(document.getElementById('timeLimit').value);
+  const diffSetting = document.getElementById('difficulty').value;
+  
+  let multiplier = 1;
+  
+  // Time Multipliers
+  if(timeSetting === 8) multiplier *= 1.5; // Less time = More XP
+  if(timeSetting === 20) multiplier *= 0.5; // More time = Less XP
+  
+  // Difficulty Multipliers
+  if(diffSetting === 'hard') multiplier *= 1.5; // Hard = More XP
+  
+  return Math.ceil(base * multiplier);
+}
+
+// Show floating XP animation
+function showFloatingXP(amount, x, y){
+  const el = document.createElement('div');
+  el.className = 'xp-popup';
+  el.textContent = `+${amount} XP`;
+  el.style.left = x + 'px';
+  el.style.top = y + 'px';
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(), 1000);
+}
+
+// Filter elements based on difficulty
+function getGameElements(){
+  const diff = document.getElementById('difficulty').value;
+  if(diff === 'easy'){
+    // Return only elements in the easySymbols list
+    return elements.filter(e => easySymbols.includes(e.symbol));
+  } else {
+    // Hard mode = All elements
+    return elements.slice();
+  }
+}
+
 // --- Localization Logic ---
 function applyLanguage(){
   const t = dictionary[currentLang];
   document.documentElement.lang = currentLang;
   document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
   
-  // Update Menu
   document.getElementById('titleText').textContent = t.title;
   menuQuiz.textContent = t.btnQuiz;
   menuVal.textContent = t.btnVal;
   clearSaveBtn.textContent = t.reset;
   document.getElementById('lblMode').textContent = t.mode;
   
-  // Update Game UI
   document.getElementById('txtBack').textContent = t.back;
   document.getElementById('lblDiff').textContent = t.diff;
   document.getElementById('lblTime').textContent = t.time;
   document.getElementById('lblXP').textContent = t.xp;
   document.getElementById('lblRank').textContent = t.rank;
   document.getElementById('optEasy').textContent = t.easy;
-  document.getElementById('optMed').textContent = t.med;
   document.getElementById('optHard').textContent = t.hard;
   
-  // Quiz Specific
   document.getElementById('quizHeader').textContent = t.qHeader;
   answerInput.placeholder = t.phSym;
   document.getElementById('btnCheck1').textContent = t.check;
   document.getElementById('streakLbl1').textContent = t.streak;
   document.getElementById('quizTimerLbl').textContent = t.time;
 
-  // Valency Specific
   document.getElementById('valHeader').textContent = t.vHeader;
   document.getElementById('valNote').textContent = t.vNote;
   document.getElementById('btnCheck2').textContent = t.check;
   document.getElementById('streakLbl2').textContent = t.streak;
   document.getElementById('valTimerLbl').textContent = t.time;
 
-  // Lose Screen
   document.getElementById('txtWrong').textContent = t.wrong;
   document.getElementById('txtCorrectIs').textContent = t.correctIs;
 
@@ -402,7 +475,7 @@ function loadState(){
     streak=st.streak||0; 
     if(st.lang) { currentLang = st.lang; langSelect.value = st.lang; }
     if(st.settings){
-      document.getElementById('difficulty').value=st.settings.difficulty||'medium'; 
+      document.getElementById('difficulty').value=st.settings.difficulty||'easy'; 
       document.getElementById('timeLimit').value=st.settings.timeLimit||'12';
     } 
     updateStats(false);
@@ -445,12 +518,8 @@ function showMenu(){
   game.classList.add('hidden'); 
   hideAllModes(); 
   currentMode=null; 
-  
-  // Reset timer displays
   timerEl.textContent = '--';
   valTimerEl.textContent = '--';
-  timebar.style.width = '100%';
-  valTimebar.style.width = '100%';
 }
 
 function showGame(){
@@ -466,7 +535,7 @@ function hideAllModes(){
 // --- Quiz Mode ---
 function startQuiz(){
   clearAllTimers();
-  quizList=elements.slice(); 
+  quizList = getGameElements();
   shuffle(quizList); 
   quizIndex=0; 
   nextQuiz();
@@ -474,7 +543,7 @@ function startQuiz(){
 
 function nextQuiz(){
   clearAllTimers();
-  if(quizIndex>=quizList.length){ quizList=elements.slice(); shuffle(quizList); quizIndex=0; }
+  if(quizIndex>=quizList.length){ quizList = getGameElements(); shuffle(quizList); quizIndex=0; }
   
   const el=quizList[quizIndex]; 
   current=el; 
@@ -511,7 +580,13 @@ function submitQuizAnswer(){
   if(correct){
     correctSound.play(); 
     streak++; 
-    xp+=10; 
+    const pts = calculateXP();
+    xp+=pts; 
+    
+    // Animation logic
+    const rect = answerInput.getBoundingClientRect();
+    showFloatingXP(pts, rect.left + rect.width/2, rect.top);
+
     quizIndex++; 
     updateStats(); 
     saveState(); 
@@ -528,7 +603,7 @@ function submitQuizAnswer(){
 // --- Valency Mode ---
 function startValency(){
   clearAllTimers();
-  valList=elements.slice(); 
+  valList=getGameElements();
   shuffle(valList); 
   valIndex=0; 
   nextVal();
@@ -536,7 +611,7 @@ function startValency(){
 
 function nextVal(){
   clearAllTimers();
-  if(valIndex>=valList.length){ valList=elements.slice(); shuffle(valList); valIndex=0; }
+  if(valIndex>=valList.length){ valList=getGameElements(); shuffle(valList); valIndex=0; }
   
   const el=valList[valIndex]; 
   current=el; 
@@ -570,7 +645,13 @@ function submitValAnswer(){
   if(ans && valAcceptedFor(current,ans)){
     correctSound.play(); 
     streak++; 
-    xp+=10; 
+    const pts = calculateXP();
+    xp+=pts; 
+    
+    // Animation logic
+    const rect = valAnswer.getBoundingClientRect();
+    showFloatingXP(pts, rect.left + rect.width/2, rect.top);
+
     valIndex++; 
     updateStats(); 
     saveState(); 
